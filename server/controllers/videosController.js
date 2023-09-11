@@ -3,9 +3,9 @@ const connection = require('../config/db');
 
 // Create a new video
 const createVideo = (req, res) => {
-  const { titulo, miniatura_ruta, video_ruta, descripcion } = req.body;
-  const sql = 'INSERT INTO VIDEOS (titulo, miniatura_ruta, video_ruta, descripcion) VALUES (?, ?, ?, ?)';
-  const values = [titulo, miniatura_ruta, video_ruta, descripcion];
+  const { video_id, duracion, fecha_publicacion, titulo, miniatura_ruta, video_ruta, descripcion } = req.body;
+  const sql = 'INSERT INTO VIDEOS ( video_id, duracion, fecha_publicacion, titulo, miniatura_ruta, video_ruta, descripcion) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const values = [video_id, duracion, fecha_publicacion, titulo, miniatura_ruta, video_ruta, descripcion];
 
   connection.query(sql, values, (err, results) => {
     if (err) {

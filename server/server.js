@@ -1,5 +1,5 @@
 const express = require('express');
-const env = require('./config/env');
+const env = require('dotenv');
 const videoRoutes = require('./routes/videosRouter');
 
 env.config();
@@ -11,7 +11,11 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use('/api', videoRoutes);
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
-app.listen(env.PORT, () => {
-    console.log(`Servidor corriendo en puerto ${env.PORT}.`);
+app.listen(process.env.PORT, () => {
+    console.log(`Servidor corriendo en puerto ${process.env.PORT}.`);
+    
 });

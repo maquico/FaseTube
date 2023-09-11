@@ -1,0 +1,18 @@
+#Creacion de video
+POST http://localhost:3001/api/videos
+Content-Type: application/json
+
+{
+    "video_id": 1,
+    "duracion": 20,
+  "titulo": "20 Seconds Timer with Music",
+  "descripcion": "Video de prueba",
+  "miniatura_ruta": "../uploads/miniaturas/miniaturaPlaceholder.png",
+    "video_ruta": "../uploads/videos/20secondstimer.mp4",
+    "fecha_publicacion": "2021-05-01"
+}
+
+
+
+
+
