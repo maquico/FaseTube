@@ -1,7 +1,7 @@
 @base_url = http://localhost:3001
 
 ### Create a new video ###
-POST {{base_url}}/api/videos
+POST {{base_url}}/api/videos/add
 Content-Type: application/json
 
 {
@@ -14,9 +14,14 @@ Content-Type: application/json
     "fecha_publicacion": "2023-09-14T12:00:00Z"
 }
 
-
 ### Get Video by ID ###
 GET {{base_url}}/api/videos/1
+
+
+### Get all videos ###
+GET {{base_url}}/api/videos
+
+
 
 
 

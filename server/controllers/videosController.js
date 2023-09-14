@@ -48,9 +48,20 @@ const getVideoById = async (req, res) => {
   }
 }
 
+const getAllVideos = async (req, res) => {
+  try {
+    const videos = await prisma.VIDEOS.findMany();
+    res.json(videos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error getting videos' });
+  }
+}
+
 module.exports = {
   createVideo,
   getVideoById,
+  getAllVideos
 };
 
 

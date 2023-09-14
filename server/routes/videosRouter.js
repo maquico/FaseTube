@@ -4,9 +4,12 @@ const router = express.Router();
 const videoController = require('../controllers/videosController');
 
 // Create a new video
-router.post('/videos', videoController.createVideo);
+router.post('/videos/add', videoController.createVideo);
 
 // // Get a video by ID
 router.get('/videos/:video_id', videoController.getVideoById);
+
+// // Get all videos
+router.get('/videos', videoController.getAllVideos);
 
 module.exports = router;
