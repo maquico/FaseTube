@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model VIDEOS {
+  video_id          Int      @id
+  titulo            String   @db.VarChar(100)
+  miniatura_ruta    String   @db.VarChar(255)
+  video_ruta        String   @db.VarChar(255)
+  likes             Int      @default(0)
+  dislikes          Int      @default(0)
+  vistas            Int      @default(0)
+  duracion          Int
+  fecha_reg         DateTime @default(now()) @db.DateTime(0)
+  fecha_publicacion DateTime @db.DateTime(0)
+  descripcion       String   @db.VarChar(255)
+}
