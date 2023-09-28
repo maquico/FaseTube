@@ -1,5 +1,6 @@
 // videoController.js
 const prisma = require('../config/db');
+const path = require('path');
 
 // Create a new video
 const createVideo = async (req, res) => {
@@ -48,6 +49,30 @@ const getVideoById = async (req, res) => {
   }
 }
 
+const getVideoFileById = async (req, res) => {
+  try {
+    let { video_id } = req.params;
+    video_id = Number(video_id);
+    const video = await prisma.VIDEOS.findUnique({
+      where: { video_id },
+    });
+
+    if (!video) {
+      return res.status(404).json({ error: 'Video not found' });
+    }
+
+    // Get the absolute path to the video file
+    const videoPath = path.join(__dirname, '..', 'uploads', 'videos', video.video_ruta);
+
+    // Send the video file
+    res.sendFile(videoPath);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error getting video' });
+  }
+};
+
+
 const getAllVideos = async (req, res) => {
   try {
     const videos = await prisma.VIDEOS.findMany();
@@ -61,7 +86,8 @@ const getAllVideos = async (req, res) => {
 module.exports = {
   createVideo,
   getVideoById,
-  getAllVideos
+  getAllVideos,
+  getVideoFileById
 };
 
 
