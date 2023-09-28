@@ -1,0 +1,18 @@
+{
+  "name": "videosapp",
+  "version": "1.0.0",
+  "description": "VideosApp",
+  "main": "index.js",
+  "scripts": {
+    "start-dev": "concurrently \"npm run start-server\" \"npm run start-client\"",
+    "start-server": "cd server && npm start",
+    "start-client": "cd client && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.1",
+    "npm-run-all": "^4.1.5"
+  }
+}
