@@ -14,6 +14,7 @@ function App() {
       const fetchedVideo = response.data;
       setVideoInfo(fetchedVideo);
       setShowVideo(true);
+      console.log('Video fetched successfully!')
     } catch (error) {
       console.error('Error fetching video:', error);
     }

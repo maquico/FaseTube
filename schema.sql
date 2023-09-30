@@ -1,3 +1,6 @@
+CREATE DATABASE VideosApp_db;
+USE VideosApp_db;
+
 CREATE TABLE `VISIBILIDAD` (
   `visibilidad_id` INT NOT NULL,
   `nombre` VARCHAR(100) NOT NULL,

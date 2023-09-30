@@ -2,29 +2,32 @@
 const prisma = require('../config/db');
 const path = require('path');
 
-// Create a new video
 const createVideo = async (req, res) => {
   try {
     const {
       video_id,
-      duracion,
-      fecha_publicacion,
       titulo,
       miniatura_ruta,
       video_ruta,
       descripcion,
+      duracion,
+      fecha_publicacion,
+      user_id, // Assuming you get the user_id from the request
+      visibilidad_id, // Assuming you get the visibilidad_id from the request
     } = req.body;
 
     // Use Prisma to create a new video record
     const video = await prisma.VIDEOS.create({
       data: {
         video_id,
-        duracion,
-        fecha_publicacion,
         titulo,
         miniatura_ruta,
         video_ruta,
         descripcion,
+        duracion,
+        fecha_publicacion,
+        user_id,
+        visibilidad_id,
       },
     });
 
@@ -34,6 +37,7 @@ const createVideo = async (req, res) => {
     res.status(500).json({ error: 'Error creating video' });
   }
 };
+
 
 const getVideoById = async (req, res) => {
   try {
@@ -83,11 +87,35 @@ const getAllVideos = async (req, res) => {
   }
 }
 
+const uploadVideo = async (req, res) => {
+  try {
+    // Check if a file was provided in the request
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file provided' });
+    }
+
+    // Access the uploaded video file using req.file
+    const videoFile = req.file;
+
+    const videoPath = videoFile.path; // Path to the uploaded video file
+
+    // You can now save this videoPath to your database or perform any other necessary operations
+
+    res.status(201).json({ message: 'Video uploaded successfully', videoPath });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error uploading video' });
+  }
+};
+
+
+
 module.exports = {
   createVideo,
   getVideoById,
   getAllVideos,
-  getVideoFileById
+  getVideoFileById,
+  uploadVideo
 };
 
 
