@@ -84,3 +84,14 @@ CREATE TABLE `VIDEOS_TAGS` (
   FOREIGN KEY (`tag_id`) REFERENCES `TAGS`(`tag_id`),
   FOREIGN KEY (`video_id`) REFERENCES `VIDEOS`(`video_id`)
 );
+
+CREATE TABLE `SUSCRIPCIONES` (
+  `suscripcion_id` INT NOT NULL,
+  `suscriptor_id` INT NOT NULL,
+  `canal_id` INT NOT NULL,
+  `fecha_reg` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  PRIMARY KEY (`suscripcion_id`),
+  FOREIGN KEY (`suscriptor_id`) REFERENCES `USUARIOS`(`user_id`),
+  FOREIGN KEY (`canal_id`) REFERENCES `USUARIOS`(`user_id`)
+);
+
