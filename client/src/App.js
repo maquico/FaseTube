@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 function App() {
   const [videoInfo, setVideoInfo] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
+  const [user, setUser] = useState({});
+
+  function handleCredentialResponse(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    var userObject = jwt_decode(response.credential);
+    console.log(userObject)
+    setUser(userObject);
+    document.getElementById('signInDiv').hidden = true;
+  }
+
+  function handleSignOut(event) {
+    setUser({});
+    document.getElementById('signInDiv').hidden = false;
+  }
 
   // Define a function to fetch a video by ID
   const getVideoById = async (videoId) => {
@@ -25,8 +40,36 @@ function App() {
     getVideoById(1); // Replace '1' with the actual video ID you want to fetch
   }, []);
 
+  // Initialize the Google One Tap sign-in button
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: '473950880318-7nnlmghonf59oqdfn0c39jfk9q813qf8.apps.googleusercontent.com',
+      callback: handleCredentialResponse,
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById('signInDiv'),
+      {theme : "outline", size : "large"}
+    );
+
+    google.accounts.id.prompt();
+  }, []);
+
+
   return (
     <div className="App">
+      <div id="signInDiv"> </div>
+      {Object.keys(user).length !== 0 &&
+        <button onClick={(e) => handleSignOut(e)}>Sign Out</button>
+      }
+        {user && 
+        <div>
+          <img alt="" src={user.picture}></img>
+          <h3>{user.name}</h3>
+        </div>
+        }
+     
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         {showVideo && videoInfo && (
