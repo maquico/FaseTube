@@ -2,6 +2,7 @@ const express = require('express');
 const env = require('dotenv');
 const cors = require('cors');
 const videoRoutes = require('./routes/videosRouter');
+const usersRoutes = require('./routes/usersRouter');
 const multer = require('multer');
 
 env.config();
@@ -27,6 +28,7 @@ app.use(express.json());
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static('uploads'));
 app.use('/api', videoRoutes);
+app.use('/api', usersRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

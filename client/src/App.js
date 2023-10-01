@@ -9,11 +9,24 @@ function App() {
   const [showVideo, setShowVideo] = useState(false);
   const [user, setUser] = useState({});
 
-  function handleCredentialResponse(response) {
+  async function handleCredentialResponse(response) {
     console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
     console.log(userObject)
     setUser(userObject);
+
+    const email = userObject.email;
+    const username = `@${email.split('@')[0]}`;
+
+    const response2 = await axios.post('http://localhost:3001/api/users/sign_in', {
+      username: username,
+      nombres: userObject.given_name,
+      apellidos: userObject.family_name,
+      corrreo: userObject.email,
+    });
+
+    console.log(response2)
+
     document.getElementById('signInDiv').hidden = true;
   }
 
