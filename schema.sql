@@ -1,14 +1,15 @@
+DROP DATABASE VideosApp_db;
 CREATE DATABASE VideosApp_db;
 USE VideosApp_db;
 
 CREATE TABLE `VISIBILIDAD` (
-  `visibilidad_id` INT NOT NULL,
+  `visibilidad_id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`visibilidad_id`)
 );
 
 CREATE TABLE `USUARIOS` (
-  `user_id` INT NOT NULL,
+  `user_id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(100) NOT NULL UNIQUE, 
   `nombres` VARCHAR(100) NOT NULL,
   `apellidos` VARCHAR(100) NOT NULL,
@@ -26,7 +27,7 @@ CREATE TABLE `USUARIOS` (
 
 
 CREATE TABLE `VIDEOS` (
-  `video_id` INT NOT NULL,
+  `video_id` INT NOT NULL AUTO_INCREMENT,
   `titulo` VARCHAR(100) NOT NULL,
   `miniatura_ruta` VARCHAR(255) NOT NULL,
   `video_ruta` VARCHAR(255) NOT NULL,
@@ -45,7 +46,7 @@ CREATE TABLE `VIDEOS` (
 );
 
 CREATE TABLE `COMENTARIOS` (
-  `comentario_id` INT NOT NULL,
+  `comentario_id` INT NOT NULL AUTO_INCREMENT,
   `contenido` VARCHAR(255) NOT NULL,
   `fecha_reg` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   `likes` INT DEFAULT 0 NOT NULL,
@@ -59,7 +60,7 @@ CREATE TABLE `COMENTARIOS` (
 );
 
 CREATE TABLE `RESPUESTAS` (
-  `respuesta_id` INT NOT NULL,
+  `respuesta_id` INT NOT NULL AUTO_INCREMENT,
   `contenido` VARCHAR(255) NOT NULL,
   `likes` INT DEFAULT 0 NOT NULL,
   `dislikes` INT DEFAULT 0 NOT NULL,
@@ -72,7 +73,7 @@ CREATE TABLE `RESPUESTAS` (
 );
 
 CREATE TABLE `TAGS` (
-  `tag_id` INT NOT NULL,
+  `tag_id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`tag_id`)
 );
@@ -86,7 +87,7 @@ CREATE TABLE `VIDEOS_TAGS` (
 );
 
 CREATE TABLE `SUSCRIPCIONES` (
-  `suscripcion_id` INT NOT NULL,
+  `suscripcion_id` INT NOT NULL AUTO_INCREMENT,
   `suscriptor_id` INT NOT NULL,
   `canal_id` INT NOT NULL,
   `fecha_reg` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
