@@ -2,8 +2,13 @@
 import { ClerkProvider, RedirectToSignIn, SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import ProtectedPage from "../ProtectedPage";
+
 import App from "../App";
 
+import PrincipalPage from "../pages/PrincipalPage";
+import VisualizadorPage from "../pages/VisualizadorPage";
+import NotFoundPage from "../pages/NotFoundPage";
+import Topbar from "./Topbar";
 
 const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -15,8 +20,12 @@ const ClerkWithRoutes = () => {
         publishableKey={clerkPubKey}
         navigate={(to) => navigate(to)}
       >
+        <Topbar />
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<PrincipalPage />} />
+          <Route path="/suscripciones" element={<PrincipalPage />} />
+          <Route path="/ver/:video" element={<VisualizadorPage />} />
+          <Route path="*" element={<NotFoundPage />} />
           <Route
             path="/sign-in/*"
             element={<SignIn redirectUrl={'/protected'} routing="path" path="/sign-in" />}
