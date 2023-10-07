@@ -33,7 +33,9 @@ export default function Topbar() {
               Subir vídeo
             </p>
           </Link>
-          <div className="bg-violet-600 w-10 h-10 rounded-full mx-4"></div>
+          <div className="bg-violet-600 w-10 h-10 rounded-full mx-4">
+            <a href="/sign-up"> sign up </a>
+          </div>
         </div>
       </div>
     </div>
