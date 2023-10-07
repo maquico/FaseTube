@@ -16,7 +16,7 @@ CREATE TABLE `USUARIOS` (
   `fecha_nac` DATETIME NULL,
   `fecha_reg` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   `corrreo` VARCHAR(100) NOT NULL,
-  `clave` VARCHAR(100) NULL,
+  `clave` VARCHAR(100) NULL UNIQUE,
   `foto_ruta` VARCHAR(255) NULL,
   `descripcion` VARCHAR(255) NULL,
   `suscriptores` INT DEFAULT 0 NOT NULL,
@@ -96,3 +96,10 @@ CREATE TABLE `SUSCRIPCIONES` (
   FOREIGN KEY (`canal_id`) REFERENCES `USUARIOS`(`user_id`)
 );
 
+CREATE TABLE `LIKED_VIDEOS` (
+  `user_id` INT NOT NULL,
+  `video_id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `video_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `USUARIOS`(`user_id`),
+  FOREIGN KEY (`video_id`) REFERENCES `VIDEOS`(`video_id`)
+);
