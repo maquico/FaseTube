@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <aside className="w-1/6 px-2 fixed">
+    <aside className="w-1/6 px-2">
       <NavLink
         to="/"
         className={({ isActive }) =>
@@ -47,7 +47,7 @@ export default function Sidebar() {
       </NavLink>
 
       <NavLink
-        to="/"
+        to="/mi-canal"
         className={({ isActive }) =>
           isActive
             ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"

@@ -8,7 +8,7 @@ export default function Topbar() {
         {/* Logotipo */}
         <div className="flex-1 flex justify-start">
           <Link to="/">
-            <img src="/public/imagotipo.svg" width={120} />
+            <img src="/imagotipo.svg" width={120} />
           </Link>
         </div>
 
