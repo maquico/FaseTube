@@ -97,10 +97,14 @@ CREATE TABLE `SUSCRIPCIONES` (
   FOREIGN KEY (`canal_id`) REFERENCES `USUARIOS`(`user_id`)
 );
 
+DROP TABLE IF EXISTS `LIKED_VIDEOS`;
+
 CREATE TABLE `LIKED_VIDEOS` (
   `user_id` INT NOT NULL,
   `video_id` INT NOT NULL,
+  `isLiked` INT NOT NULL,
   PRIMARY KEY (`user_id`, `video_id`),
   FOREIGN KEY (`user_id`) REFERENCES `USUARIOS`(`user_id`),
   FOREIGN KEY (`video_id`) REFERENCES `VIDEOS`(`video_id`)
 );
+
