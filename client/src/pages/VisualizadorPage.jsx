@@ -61,7 +61,42 @@ export default function VisualizadorPage() {
           <p className="text-white font-serif">Descripción</p>
         </div>
 
-        <hr className="my-1 invisible" />
+        <hr className="my-3 invisible" />
+
+        {/* Comentarios */}
+        <div className="w-[871px] h-24">
+          <h2 className="font-serif text-white text-2xl">Comentarios</h2>
+
+          {/* Añadir comentario */}
+          <div className="flex columns-3 my-2">
+            <div className="w-10 h-10 rounded-full bg-purple-700"></div>
+            <input
+              type="text"
+              placeholder="Añade tu comentario"
+              className="bg-transparent text-white border-b-2 w-[700px] mx-4 focus:outline-none font-serif"
+            />
+            <button className="bg-purple-700 rounded-full px-4 font-serif text-white">
+              Comentar
+            </button>
+          </div>
+
+          {/* Comentarios publicados */}
+          <div className="my-4">
+            <Comentario
+              canal="Canal A"
+              comentario="Me gusta la carne, la leche y el pan.Me gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el pan"
+            />
+            <Comentario
+              canal="Canal B"
+              comentario="El más inteligente de su casa (vive solo)"
+            />
+            <Comentario
+              canal="Canal C"
+              comentario="No dejes que nadie arruine tu día. Es TU DÍA; arruínalo tú mismo"
+            />
+          </div>
+          <hr className="my-10 invisible" />
+        </div>
       </div>
 
       {/* Recomendados */}
@@ -76,3 +111,15 @@ export default function VisualizadorPage() {
     </div>
   );
 }
+
+const Comentario = ({ canal, comentario }) => {
+  return (
+    <div className="w-full flex columns-2 my-4 mx-2">
+      <div className="w-10 h-10 rounded-full bg-purple-700"></div>
+      <div className="w-[700px] font-serif text-white mx-2">
+        <p>{canal}</p>
+        <p className="opacity-60">{comentario}</p>
+      </div>
+    </div>
+  );
+};

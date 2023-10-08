@@ -57,10 +57,29 @@ export default function Sidebar() {
         <CameraReelsFill size={20} />
         <p className="px-2 font-serif">Mi canal</p>
       </NavLink>
+
+      <hr className="m-4 border border-zinc-300 border-opacity-50" />
+
+      <div className="w-full">
+        <h2 className="text-white font-serif text-xl w-full px-5">
+          Suscripciones
+        </h2>
+        {/* <hr className="my-2 invisible" /> */}
+        <Suscripciones />
+        <Suscripciones />
+        <Suscripciones />
+      </div>
     </aside>
   );
 }
 
-const NavLinkWithIcon = () => {
-  return "";
+const Suscripciones = () => {
+  return (
+    <div className="flex w-full p-2 mx-2 columns-2 hover:bg-[#5A189A80] rounded-xl">
+      <div className="w-8 h-8 bg-white rounded-full" />
+      <h4 className="text-[#7B2CBF] font-serif flex mx-2 items-center">
+        Canal 1
+      </h4>
+    </div>
+  );
 };
