@@ -50,6 +50,7 @@ CREATE TABLE `COMENTARIOS` (
   `contenido` VARCHAR(255) NOT NULL,
   `fecha_reg` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   `likes` INT DEFAULT 0 NOT NULL,
+  `parentID` INT NULL,
   `dislikes` INT DEFAULT 0 NOT NULL,
   `total_respuestas` INT DEFAULT 0 NOT NULL,
   `user_id` INT NOT NULL,
