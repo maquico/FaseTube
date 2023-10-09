@@ -13,17 +13,23 @@ export default function VisualizadorPage() {
       {/* Video */}
       <div className="w-[971px]">
         {/* Visualizador */}
-        <div className="w-[871px] h-[490px] bg-zinc-300 rounded-xl"></div>
+        <div className="w-[930px] h-[523px] flex bg-zinc-300 rounded-xl justify-center">
+          <video
+            src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            className="w-[930px] h-[523px] object-cover focus:outline-none"
+            controls
+          />
+        </div>
         <hr className="my-1 invisible" />
 
         {/* Interactividad */}
-        <div className="w-[871px] h-24">
+        <div className="w-[930px] h-24">
           <h1 className="font-serif text-white text-2xl">Nombre del vídeo</h1>
           <hr className="my-1 invisible" />
           <div className="flex w-full columns-4">
             {/* Canal */}
             <div className="w-10 h-10 rounded-full bg-purple-700"></div>
-            <div className="w-1/5 mx-3">
+            <div className="w-fit mx-3">
               <h2 className="font-serif text-white whitespace-nowrap overflow-hidden">
                 Nombre del canal
               </h2>
@@ -33,7 +39,7 @@ export default function VisualizadorPage() {
             </div>
 
             {/* Botón de suscripción */}
-            <div className="flex">
+            <div className="flex mx-2">
               <button className="bg-purple-700 rounded-full px-4 font-serif text-white">
                 Suscribirse
               </button>
@@ -51,10 +57,10 @@ export default function VisualizadorPage() {
           </div>
         </div>
 
-        <hr className="my-1 invisible" />
+        <hr className="my-0 invisible" />
 
         {/* Detalles del vídeo */}
-        <div className="w-[871px] h-16 bg-violet-900 bg-opacity-50 rounded-lg px-4 py-2">
+        <div className="w-[930px] h-16 bg-violet-900 bg-opacity-50 rounded-lg px-4 py-2">
           <p className="text-white font-serif">
             123 visualizaciones · Subido el 2 de octubre de 2023
           </p>
@@ -64,18 +70,18 @@ export default function VisualizadorPage() {
         <hr className="my-3 invisible" />
 
         {/* Comentarios */}
-        <div className="w-[871px] h-24">
+        <div className="w-[930px] h-24">
           <h2 className="font-serif text-white text-2xl">Comentarios</h2>
 
           {/* Añadir comentario */}
-          <div className="flex columns-3 my-2">
+          <div className="flex columns-3 my-2 w-[930px]">
             <div className="w-10 h-10 rounded-full bg-purple-700"></div>
             <input
               type="text"
               placeholder="Añade tu comentario"
-              className="bg-transparent text-white border-b-2 w-[700px] mx-4 focus:outline-none font-serif"
+              className="bg-transparent text-white border-b-2 w-[800px] mx-4 focus:outline-none font-serif"
             />
-            <button className="bg-purple-700 rounded-full px-4 font-serif text-white">
+            <button className="ml-auto bg-purple-700 rounded-full px-4 font-serif text-white">
               Comentar
             </button>
           </div>
@@ -116,7 +122,7 @@ const Comentario = ({ canal, comentario }) => {
   return (
     <div className="w-full flex columns-2 my-4 mx-2">
       <div className="w-10 h-10 rounded-full bg-purple-700"></div>
-      <div className="w-[700px] font-serif text-white mx-2">
+      <div className="w-[800px] font-serif text-white mx-2">
         <p>{canal}</p>
         <p className="opacity-60">{comentario}</p>
       </div>

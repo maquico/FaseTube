@@ -6,12 +6,14 @@ import {
   SignedIn,
   SignedOut,
 } from "@clerk/clerk-react";
+import { esES } from "@clerk/localizations";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import ProtectedPage from "../ProtectedPage";
 import PrincipalPage from "../pages/PrincipalPage";
 import VisualizadorPage from "../pages/VisualizadorPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import Topbar from "./Topbar";
+import BusquedaPage from "../pages/BusquedaPage";
 
 import App from "../App";
 
@@ -22,11 +24,15 @@ const ClerkWithRoutes = () => {
   const navigate = useNavigate();
 
   return (
-    <ClerkProvider publishableKey={clerkPubKey} navigate={(to) => navigate(to)}>
+    <ClerkProvider
+      localization={esES}
+      publishableKey={clerkPubKey}
+      navigate={(to) => navigate(to)}
+    >
       <Topbar />
       <Routes>
         <Route path="/" element={<PrincipalPage />} />
-        {/* <Route path="/suscripciones" element={<PrincipalPage />} /> */}
+        <Route path="/buscar/:busqueda" element={<BusquedaPage />} />
         <Route path="/ver/:video" element={<VisualizadorPage />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route
