@@ -2,19 +2,21 @@ import { Link } from "react-router-dom";
 
 export default function CardVideo({
   id,
-  nombreVideo = "None",
-  canal = "None",
-  vistas = "None",
-  tiempoSubido = "None",
-  duracion = "12:12",
+  nombreVideo = "",
+  canal = "",
+  vistas = "",
+  tiempoSubido = "",
+  duracion = "",
   miniatura = "",
-}) {
+}) 
+{
+  const miniatura_final = `https://storage.googleapis.com/fase-tube-bucket/${miniatura}`;
   return (
     <div className="w-72 my-4 mx-2">
       {/* Miniatura */}
       <Link to={"/ver/" + id}>
         <div className="flex h-44 rounded-lg bg-white justify-end items-end">
-          <img className="w-full h-full rounded-lg" src={miniatura} />
+          <img className="w-full h-full rounded-lg" src={miniatura_final} alt="My Image"/>
           <span className="absolute bg-black opacity-90 m-2 p-1 rounded-md text-white text-sm font-serif z-50">
             {duracion}
           </span>
