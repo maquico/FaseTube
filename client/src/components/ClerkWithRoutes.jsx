@@ -1,7 +1,6 @@
 // ClerkWithRoutes.jsx
 import {
   ClerkProvider,
-  RedirectToSignIn,
   SignIn,
   SignUp,
   SignedIn,
@@ -9,13 +8,12 @@ import {
 } from "@clerk/clerk-react";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import ProtectedPage from "../ProtectedPage";
-
-import App from "../App";
-
 import PrincipalPage from "../pages/PrincipalPage";
 import VisualizadorPage from "../pages/VisualizadorPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import Topbar from "./Topbar";
+
+import App from "../App";
 
 const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -59,10 +57,10 @@ const ClerkWithRoutes = () => {
           element={
             <>
               <SignedIn>
-                <ProtectedPage />
+                <ProtectedPage/>
               </SignedIn>
               <SignedOut>
-                <RedirectToSignIn />
+            
               </SignedOut>
             </>
           }

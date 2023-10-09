@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Search, Upload } from "react-bootstrap-icons";
-import { useUser } from "@clerk/clerk-react";
+import { UserButton, useUser } from "@clerk/clerk-react";
 
 export default function Topbar() {
   const { isSignedIn } = useUser();
@@ -38,12 +38,9 @@ export default function Topbar() {
                 Subir vídeo
               </p>
             </Link>
-            <div className="bg-violet-600 w-10 h-10 rounded-full mx-4"></div>
-            <Link className="flex" to="/sign-up">
-              <div className="bg-[#240046] py-2 px-4 rounded-xl text-white self-center m-0 font-serif text-lg">
-                Cerrar sesión
-              </div>
-            </Link>
+            <div className="flex ml-4 mr-4">
+              <UserButton postSignOutRedirect="/" />
+            </div>
           </div>
         ) : (
           // Sesión no iniciada
