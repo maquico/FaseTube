@@ -16,6 +16,7 @@ import Topbar from "./Topbar";
 import App from "../App";
 
 const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
+App.clerkPubKey = clerkPubKey;
 
 const ClerkWithRoutes = () => {
   const navigate = useNavigate();
