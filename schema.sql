@@ -1,5 +1,6 @@
 DROP DATABASE VideosApp_db;
 CREATE DATABASE VideosApp_db;
+
 USE VideosApp_db;
 
 CREATE TABLE `VISIBILIDAD` (
@@ -87,20 +88,25 @@ CREATE TABLE `VIDEOS_TAGS` (
   FOREIGN KEY (`video_id`) REFERENCES `VIDEOS`(`video_id`)
 );
 
+DROP TABLE IF EXISTS `SUSCRIPCIONES`;
+
 CREATE TABLE `SUSCRIPCIONES` (
-  `suscripcion_id` INT NOT NULL AUTO_INCREMENT,
   `suscriptor_id` INT NOT NULL,
   `canal_id` INT NOT NULL,
   `fecha_reg` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  PRIMARY KEY (`suscripcion_id`),
+  PRIMARY KEY (`suscriptor_id`, `canal_id`),
   FOREIGN KEY (`suscriptor_id`) REFERENCES `USUARIOS`(`user_id`),
   FOREIGN KEY (`canal_id`) REFERENCES `USUARIOS`(`user_id`)
 );
 
+DROP TABLE IF EXISTS `LIKED_VIDEOS`;
+
 CREATE TABLE `LIKED_VIDEOS` (
   `user_id` INT NOT NULL,
   `video_id` INT NOT NULL,
+  `isLiked` INT NOT NULL,
   PRIMARY KEY (`user_id`, `video_id`),
   FOREIGN KEY (`user_id`) REFERENCES `USUARIOS`(`user_id`),
   FOREIGN KEY (`video_id`) REFERENCES `VIDEOS`(`video_id`)
 );
+

@@ -9,14 +9,13 @@ import {
 import { esES } from "@clerk/localizations";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import ProtectedPage from "../ProtectedPage";
-
-import App from "../App";
-
 import PrincipalPage from "../pages/PrincipalPage";
 import VisualizadorPage from "../pages/VisualizadorPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import Topbar from "./Topbar";
 import BusquedaPage from "../pages/BusquedaPage";
+
+import App from "../App";
 
 const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 App.clerkPubKey = clerkPubKey;
@@ -68,6 +67,7 @@ const ClerkWithRoutes = () => {
                 <ProtectedPage/>
               </SignedIn>
               <SignedOut>
+            
               </SignedOut>
             </>
           }

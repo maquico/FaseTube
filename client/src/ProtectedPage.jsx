@@ -1,9 +1,9 @@
-import { UserButton } from "@clerk/clerk-react";
+import PrincipalPage from "./pages/PrincipalPage";
 
 const ProtectedPage = () => {
   return (
     <>
-      <UserButton />
+      <PrincipalPage />
     </>
   );
 };
