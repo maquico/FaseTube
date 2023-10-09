@@ -1,12 +1,12 @@
 // ClerkWithRoutes.jsx
 import {
   ClerkProvider,
-  RedirectToSignIn,
   SignIn,
   SignUp,
   SignedIn,
   SignedOut,
 } from "@clerk/clerk-react";
+import { esES } from "@clerk/localizations";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import ProtectedPage from "../ProtectedPage";
 
@@ -16,18 +16,24 @@ import PrincipalPage from "../pages/PrincipalPage";
 import VisualizadorPage from "../pages/VisualizadorPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import Topbar from "./Topbar";
+import BusquedaPage from "../pages/BusquedaPage";
 
 const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
+App.clerkPubKey = clerkPubKey;
 
 const ClerkWithRoutes = () => {
   const navigate = useNavigate();
 
   return (
-    <ClerkProvider publishableKey={clerkPubKey} navigate={(to) => navigate(to)}>
+    <ClerkProvider
+      localization={esES}
+      publishableKey={clerkPubKey}
+      navigate={(to) => navigate(to)}
+    >
       <Topbar />
       <Routes>
         <Route path="/" element={<PrincipalPage />} />
-        {/* <Route path="/suscripciones" element={<PrincipalPage />} /> */}
+        <Route path="/buscar/:busqueda" element={<BusquedaPage />} />
         <Route path="/ver/:video" element={<VisualizadorPage />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route
@@ -59,10 +65,9 @@ const ClerkWithRoutes = () => {
           element={
             <>
               <SignedIn>
-                <ProtectedPage />
+                <ProtectedPage/>
               </SignedIn>
               <SignedOut>
-                <RedirectToSignIn />
               </SignedOut>
             </>
           }

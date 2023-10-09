@@ -61,7 +61,7 @@ export default function Sidebar() {
       <hr className="m-4 border border-zinc-300 border-opacity-50" />
 
       <div className="w-full">
-        <h2 className="text-white font-serif text-xl w-full px-5">
+        <h2 className="text-white font-serif text-xl w-full px-5 my-2">
           Suscripciones
         </h2>
         {/* <hr className="my-2 invisible" /> */}

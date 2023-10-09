@@ -1,13 +1,10 @@
+// No se está utilizando >:(
 
 import "./App.css";
 import Topbar from "./components/Topbar";
 
-
-
 function App() {
-  return (
-      <Topbar/>
-  );
+  return <Topbar />;
 }
 
 export default App;
