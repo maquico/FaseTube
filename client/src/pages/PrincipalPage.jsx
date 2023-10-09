@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 
 export default function PrincipalPage() {
   const [videosInfos, setVideosInfos] = useState([]);
-  
+  const [channelInfoMap, setChannelInfoMap] = useState(new Map());
+
   useEffect(() => {
     // Make an Axios GET request to fetch data from the API endpoint
     axios
@@ -50,32 +51,21 @@ export default function PrincipalPage() {
       }
     };
 
-    // Create a map to cache channel info
-    const channelInfoCache = new Map();
-
-    // Fetch channel info for each video's user ID and update the state
+    // Fetch channel info for each video's user ID and update the channelInfoMap
     const fetchChannelInfoForVideos = async () => {
-      const updatedVideosInfos = await Promise.all(
+      const updatedChannelInfoMap = new Map(channelInfoMap);
+
+      await Promise.all(
         videosInfos.map(async (info) => {
-          // Check if channel info is already cached
-          if (channelInfoCache.has(info.user_id)) {
-            const cachedInfo = channelInfoCache.get(info.user_id);
-            return {
-              ...info,
-              username: cachedInfo ? cachedInfo.username : "Unknown",
-            };
-          } else {
+          if (!updatedChannelInfoMap.has(info.user_id)) {
             // Fetch and cache channel info
             const channelInfo = await getChannelInfo(info.user_id);
-            channelInfoCache.set(info.user_id, channelInfo);
-            return {
-              ...info,
-              username: channelInfo ? channelInfo.username : "Unknown",
-            };
+            updatedChannelInfoMap.set(info.user_id, channelInfo ? channelInfo.username : "Unknown");
           }
         })
       );
-      setVideosInfos(updatedVideosInfos);
+
+      setChannelInfoMap(updatedChannelInfoMap);
     };
 
     // Call the function to calculate tiempoSubido and fetch channel info
@@ -83,7 +73,7 @@ export default function PrincipalPage() {
       info.tiempoSubido = calculateTiempoSubido(info.fecha_reg);
     });
     fetchChannelInfoForVideos();
-  }, [videosInfos]);
+  }, [videosInfos, channelInfoMap]);
 
   return (
     <div className="flex">

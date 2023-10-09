@@ -10,7 +10,20 @@ export default function CardVideo({
   miniatura = "",
 }) 
 {
-  const miniatura_final = `https://storage.googleapis.com/fase-tube-bucket/${miniatura}`;
+  
+  const miniatura_final = `https://storage.googleapis.com/fase-tube-server-bucket/${miniatura}`;
+  //Get duration in seconds and format it to HH:MM:SS
+  const duracionSegundos = parseInt(duracion);
+  const horas = Math.floor(duracionSegundos / 3600);
+  const minutos = Math.floor((duracionSegundos % 3600) / 60);
+  const segundos = duracionSegundos % 60;
+  const duracionFormateada = [
+    horas,
+    minutos > 9 ? minutos : `0${minutos}`,
+    segundos > 9 ? segundos : `0${segundos}`,
+  ].join(":");
+
+
   return (
     <div className="w-72 my-4 mx-2">
       {/* Miniatura */}
@@ -18,7 +31,7 @@ export default function CardVideo({
         <div className="flex h-44 rounded-lg bg-white justify-end items-end">
           <img className="w-full h-full rounded-lg" src={miniatura_final} alt="My Image"/>
           <span className="absolute bg-black opacity-90 m-2 p-1 rounded-md text-white text-sm font-serif z-50">
-            {duracion}
+            {duracionFormateada}
           </span>
         </div>
       </Link>
@@ -40,7 +53,7 @@ export default function CardVideo({
             {canal}
           </p>
           <p className="text-white text-opacity-60 text-sm font-serif mx-2">
-            {vistas} ·{/* alt + 250 */} {tiempoSubido}
+            Visitas {vistas} ·{/* alt + 250 */} Subido hace {tiempoSubido}
           </p>
         </div>
       </div>
