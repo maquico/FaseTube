@@ -60,7 +60,10 @@ export default function PrincipalPage() {
           if (!updatedChannelInfoMap.has(info.user_id)) {
             // Fetch and cache channel info
             const channelInfo = await getChannelInfo(info.user_id);
-            updatedChannelInfoMap.set(info.user_id, channelInfo ? channelInfo.username : "Unknown");
+            updatedChannelInfoMap.set(info.user_id, {
+              username: channelInfo ? channelInfo.username : "Unknown",
+              foto_ruta: channelInfo.foto_ruta,
+            });
           }
         })
       );
@@ -88,7 +91,7 @@ export default function PrincipalPage() {
               key={info.video_id}
               id={info.video_id}
               nombreVideo={info.titulo}
-              canal={info.username}
+              canal={channelInfoMap.get(info.user_id) || {}}
               vistas={info.vistas}
               tiempoSubido={info.tiempoSubido}
               miniatura={info.miniatura_ruta}
