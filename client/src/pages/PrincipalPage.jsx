@@ -8,7 +8,9 @@ export default function PrincipalPage() {
   const [videosInfos, setVideosInfos] = useState([]);
   const [channelInfoMap, setChannelInfoMap] = useState(new Map());
   const {isSignedIn} = useUser();
-  // const [subscriptions, setSubscriptions] = useState(new Map());
+
+  // const [subscriptions, setSubscriptions] = useState([]);
+  //const [subscriptionsInfo, setSubscriptionsInfo] = useState(new Map());
 
   useEffect(() => {
     // Make an Axios GET request to fetch data from the API endpoint
@@ -21,32 +23,6 @@ export default function PrincipalPage() {
         console.error("Error fetching videos:", error);
       });
   }, []);
-
-  // // Fetch all suscripciones for the current user
-  // useEffect(() => {
-  //   // Function to fetch suscripciones for a given user ID
-  //  axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/suscripciones/${userId}`)
-  //       .then((response) => {
-  //         return response.data;
-  //     })
-  //     .catch ((error) => {
-  //       console.error("Error fetching suscripciones:", error);
-  //       return null;
-  //     });
-  // }, []);
-
-    // Fetch suscripciones for the current user and update the subscriptions map
-  //   const fetchSuscripciones = async () => {
-  //     const updatedSubscriptions = new Map(subscriptions);
-  //     const suscripciones = await getSuscripciones(1);
-  //     suscripciones.forEach((suscripcion) => {
-  //       updatedSubscriptions.set(suscripcion.canal_id, true);
-  //     });
-  //     setSubscriptions(updatedSubscriptions);
-  //   };
-
-  //   fetchSuscripciones();
-  // }, [subscriptions]);
 
   useEffect(() => {
     // Calculate tiempoSubido based on fecha_reg
@@ -105,7 +81,7 @@ export default function PrincipalPage() {
       info.tiempoSubido = calculateTiempoSubido(info.fecha_reg);
     });
     fetchChannelInfoForVideos();
-  }, [videosInfos, channelInfoMap]);
+  }, [videosInfos]);
 
   return (
     <div className="flex">

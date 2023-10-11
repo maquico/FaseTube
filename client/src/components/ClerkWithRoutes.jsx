@@ -31,7 +31,7 @@ const ClerkWithRoutes = () => {
     >
       <Topbar />
       <Routes>
-        <Route path="/" element={<PrincipalPage />} />
+        <Route path="/" element={<PrincipalPage/>} />
         <Route path="/buscar/:busqueda" element={<BusquedaPage />} />
         <Route path="/ver/:video" element={<VisualizadorPage />} />
         <Route path="*" element={<NotFoundPage />} />
