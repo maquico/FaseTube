@@ -2,10 +2,13 @@ import CardVideo from "../components/CardVideo";
 import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 
 export default function PrincipalPage() {
   const [videosInfos, setVideosInfos] = useState([]);
   const [channelInfoMap, setChannelInfoMap] = useState(new Map());
+  const {isSignedIn} = useUser();
+  // const [subscriptions, setSubscriptions] = useState(new Map());
 
   useEffect(() => {
     // Make an Axios GET request to fetch data from the API endpoint
@@ -18,6 +21,32 @@ export default function PrincipalPage() {
         console.error("Error fetching videos:", error);
       });
   }, []);
+
+  // // Fetch all suscripciones for the current user
+  // useEffect(() => {
+  //   // Function to fetch suscripciones for a given user ID
+  //  axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/suscripciones/${userId}`)
+  //       .then((response) => {
+  //         return response.data;
+  //     })
+  //     .catch ((error) => {
+  //       console.error("Error fetching suscripciones:", error);
+  //       return null;
+  //     });
+  // }, []);
+
+    // Fetch suscripciones for the current user and update the subscriptions map
+  //   const fetchSuscripciones = async () => {
+  //     const updatedSubscriptions = new Map(subscriptions);
+  //     const suscripciones = await getSuscripciones(1);
+  //     suscripciones.forEach((suscripcion) => {
+  //       updatedSubscriptions.set(suscripcion.canal_id, true);
+  //     });
+  //     setSubscriptions(updatedSubscriptions);
+  //   };
+
+  //   fetchSuscripciones();
+  // }, [subscriptions]);
 
   useEffect(() => {
     // Calculate tiempoSubido based on fecha_reg
@@ -80,7 +109,7 @@ export default function PrincipalPage() {
 
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar isSignedIn={isSignedIn}/>
       <div className="w-5/6 h-fit">
         <div className="font-serif text-white text-2xl mx-2">
           <h1>Recientemente añadidos</h1>
