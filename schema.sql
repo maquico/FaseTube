@@ -27,6 +27,7 @@ CREATE TABLE `USUARIOS` (
 );
 
 
+DROP TABLE IF EXISTS `VIDEOS`;
 CREATE TABLE `VIDEOS` (
   `video_id` INT NOT NULL AUTO_INCREMENT,
   `titulo` VARCHAR(100) NOT NULL,
@@ -37,7 +38,7 @@ CREATE TABLE `VIDEOS` (
   `vistas` INT DEFAULT 0 NOT NULL,
   `duracion` INT NOT NULL,
   `fecha_reg` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  `fecha_publicacion` DATETIME NOT NULL,
+  `fecha_publicacion` DATETIME NULL,
   `descripcion` VARCHAR(255) NOT NULL,
   `user_id` INT NOT NULL,
   `visibilidad_id` INT NOT NULL,
