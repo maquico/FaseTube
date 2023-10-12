@@ -54,7 +54,7 @@ export default function Topbar() {
         {isSignedIn ? (
           // Sesión iniciada
           <div className="flex-1 flex justify-end">
-            <Link className="flex" to="/">
+            <Link className="flex" to="/subir-video">
               <Upload color="#7B2CBF" size={20} className="self-center mx-2" />
               <p className="text-white self-center m-0 font-serif text-lg">
                 Subir vídeo

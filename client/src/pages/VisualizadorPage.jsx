@@ -1,9 +1,61 @@
 import { useParams } from "react-router-dom";
 import { HandThumbsUp, HandThumbsDown } from "react-bootstrap-icons";
 import RelatedVideo from "../components/RelatedVideo";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+function formatDate(date) {
+  const nombreMes = [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre",
+  ];
+
+  const day = date.getDate();
+  const month = nombreMes[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${day} de ${month} de ${year}`;
+}
 
 export default function VisualizadorPage() {
   const { video } = useParams();
+  const [videoInfo, setVideoInfo] = useState({});
+  const [canalInfo, setCanalInfo] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/videos/id/?video_id=${video}`
+      )
+      .then((res) => {
+        // console.log(res.data);
+        setVideoInfo(res.data);
+        fetchCanal(res.data.user_id);
+      })
+      .catch((error) => console.error("Error fetching video: ", error));
+  }, [video]);
+
+  const fetchCanal = (canal_id) => {
+    axios
+      .get(
+        `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${canal_id}`
+      )
+      .then((res) => {
+        console.log(res.data);
+        setCanalInfo(res.data);
+      })
+      .catch((error) => console.error("Error fetching canal: ", error));
+  };
 
   return (
     <div className="flex columns-3">
@@ -15,23 +67,26 @@ export default function VisualizadorPage() {
         {/* Visualizador */}
         <div className="w-[930px] h-[523px] flex bg-zinc-300 rounded-xl justify-center">
           <video
-            src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            src={`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/videos/watch/?video_id=${video}`}
             className="w-[930px] h-[523px] object-cover focus:outline-none rounded-xl"
             controls
+            // autoPlay
           />
         </div>
         <hr className="my-1 invisible" />
 
         {/* Interactividad */}
         <div className="w-[930px] h-24">
-          <h1 className="font-serif text-white text-2xl">Nombre del vídeo</h1>
+          <h1 className="font-serif text-white text-2xl">{videoInfo.titulo}</h1>
           <hr className="my-1 invisible" />
           <div className="flex w-full columns-4">
             {/* Canal */}
-            <div className="w-10 h-10 rounded-full bg-purple-700"></div>
+            <div className="w-10 h-10 rounded-full">
+              <img className="rounded-full" src={canalInfo.foto_ruta}></img>
+            </div>
             <div className="w-fit mx-3">
               <h2 className="font-serif text-white whitespace-nowrap overflow-hidden">
-                Nombre del canal
+                {canalInfo.username}
               </h2>
               <p className="font-serif text-white opacity-50 text-xs">
                 1,000 subs
@@ -49,7 +104,7 @@ export default function VisualizadorPage() {
             <div className="flex ml-auto">
               <div className="w-28 h-10 bg-violet-900 bg-opacity-30 rounded-2xl border-2 border-zinc-300 border-opacity-30 flex items-center px-3">
                 <HandThumbsUp color="white" />
-                <p className="text-white font-serif mx-1">234</p>
+                <p className="text-white font-serif mx-1">{videoInfo.likes}</p>
                 {/* <div className="w-10 rotate-90 border ml-auto"></div> */}
                 <HandThumbsDown color="white" className="ml-auto" />
               </div>
@@ -62,9 +117,10 @@ export default function VisualizadorPage() {
         {/* Detalles del vídeo */}
         <div className="w-[930px] h-16 bg-violet-900 bg-opacity-50 rounded-lg px-4 py-2">
           <p className="text-white font-serif">
-            123 visualizaciones · Subido el 2 de octubre de 2023
+            {videoInfo.vistas} visualizaciones · Subido el{" "}
+            {formatDate(new Date(videoInfo.fecha_reg))}
           </p>
-          <p className="text-white font-serif">Descripción</p>
+          <p className="text-white font-serif">{videoInfo.descripcion}</p>
         </div>
 
         <hr className="my-3 invisible" />
