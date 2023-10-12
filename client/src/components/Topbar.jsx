@@ -10,7 +10,8 @@ export default function Topbar() {
   const [busqueda, setBusqueda] = useState("");
   const handleBuscador = () => {
     if (busqueda.trim().length !== 0) {
-      navigate("/buscar/" + busqueda);
+      navigate("/buscar/" + busqueda.replaceAll("/", " "));
+      setBusqueda(busqueda.replaceAll("/", " "));
     }
   };
 
@@ -32,6 +33,11 @@ export default function Topbar() {
             placeholder="Buscar"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13) {
+                handleBuscador();
+              }
+            }}
           />
           <button
             type="submit"

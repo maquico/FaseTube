@@ -16,7 +16,7 @@ export default function VisualizadorPage() {
         <div className="w-[930px] h-[523px] flex bg-zinc-300 rounded-xl justify-center">
           <video
             src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            className="w-[930px] h-[523px] object-cover focus:outline-none"
+            className="w-[930px] h-[523px] object-cover focus:outline-none rounded-xl"
             controls
           />
         </div>
