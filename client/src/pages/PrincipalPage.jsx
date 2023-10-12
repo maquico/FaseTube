@@ -5,12 +5,18 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 
 export default function PrincipalPage() {
+  const [user_id, setUserId] = useState();
   const [videosInfos, setVideosInfos] = useState([]);
   const [channelInfoMap, setChannelInfoMap] = useState(new Map());
-  const {isSignedIn} = useUser();
+  const {isSignedIn, user} = useUser();
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [subscriptionsInfoMap, setSubscriptionsInfoMap] = useState(new Map());
 
-  // const [subscriptions, setSubscriptions] = useState([]);
-  //const [subscriptionsInfo, setSubscriptionsInfo] = useState(new Map());
+  useEffect(() => {
+    if ( user === undefined || !isSignedIn) return;
+    setUserId(user.id);
+  }
+  , [user, isSignedIn]);
 
   useEffect(() => {
     // Make an Axios GET request to fetch data from the API endpoint
@@ -45,47 +51,49 @@ export default function PrincipalPage() {
       }
     };
 
-    // Function to fetch channel info for a given user ID
-    const getChannelInfo = async (userId) => {
-      try {
-        const response = await axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info/${userId}`);
-        return response.data;
-      } catch (error) {
-        console.error("Error fetching channel info:", error);
-        return null;
-      }
-    };
-
-    // Fetch channel info for each video's user ID and update the channelInfoMap
-    const fetchChannelInfoForVideos = async () => {
-      const updatedChannelInfoMap = new Map(channelInfoMap);
-
-      await Promise.all(
-        videosInfos.map(async (info) => {
-          if (!updatedChannelInfoMap.has(info.user_id)) {
-            // Fetch and cache channel info
-            const channelInfo = await getChannelInfo(info.user_id);
-            updatedChannelInfoMap.set(info.user_id, {
-              username: channelInfo ? channelInfo.username : "Unknown",
-              foto_ruta: channelInfo.foto_ruta,
-            });
-          }
-        })
-      );
-
+     // Fetch channel info for each video's user ID and update the channelInfoMap
+    const updateChannelInfoMap = async () => {
+      const updatedChannelInfoMap = await fetchChannelInfoForVideos(channelInfoMap, videosInfos, 'videos');
       setChannelInfoMap(updatedChannelInfoMap);
     };
+    updateChannelInfoMap();
 
     // Call the function to calculate tiempoSubido and fetch channel info
     videosInfos.forEach((info) => {
       info.tiempoSubido = calculateTiempoSubido(info.fecha_reg);
     });
-    fetchChannelInfoForVideos();
   }, [videosInfos]);
+
+  
+    useEffect(() => {
+      // Function to fetch suscripciones for a given user ID
+      if (!isSignedIn) return;
+      else{
+        axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/suscripciones/?suscriptor_clave=${user_id}`)
+          .then((response) => {
+            console.log(response.data)
+            setSubscriptions(response.data)
+        })
+        .catch ((error) => {
+          console.error("Error fetching suscripciones:", error);
+          return null;
+        });
+      }
+    }, [user_id]);
+  
+
+
+  useEffect(() => {
+    const updateSuscripcionesInfoMap = async () => {
+      const updatedSubscriptionsInfoMap = await fetchChannelInfoForVideos(subscriptionsInfoMap, subscriptions, 'suscripciones');
+      setSubscriptionsInfoMap(updatedSubscriptionsInfoMap);
+    };
+    updateSuscripcionesInfoMap();
+  }, [subscriptions]);
 
   return (
     <div className="flex">
-      <Sidebar isSignedIn={isSignedIn}/>
+      <Sidebar isSignedIn={isSignedIn} subscriptionsInfoMap={subscriptionsInfoMap}/>
       <div className="w-5/6 h-fit">
         <div className="font-serif text-white text-2xl mx-2">
           <h1>Recientemente añadidos</h1>
@@ -108,3 +116,42 @@ export default function PrincipalPage() {
     </div>
   );
 }
+
+const getChannelInfo = async (channelId) => {
+  console.log(`Fetching channel info for channel ID:`, channelId);
+  try {
+    const response = await axios.get(
+      `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${channelId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching channel info:", error);
+    return null;
+  }
+};
+
+
+const fetchChannelInfoForVideos = async (dataMap, infos, purpose) => {
+  const updatedChannelInfoMap = new Map(dataMap);
+  let ID;
+  console.log(purpose, infos)
+  await Promise.all(
+    infos.map(async (info) => {
+      if (purpose === 'suscripciones') {
+        ID = info.canal_id;
+      }
+      else if (purpose === 'videos') {
+        ID = info.user_id;
+      }
+        console.log(`Fetching ${purpose} info for user ID:`, ID);
+        const channelInfo = await getChannelInfo(ID);
+        updatedChannelInfoMap.set(ID, {
+          username: channelInfo ? channelInfo.username : "Unknown",
+          foto_ruta: channelInfo.foto_ruta,
+        });
+  
+    })
+  );
+  return updatedChannelInfoMap;
+  
+};

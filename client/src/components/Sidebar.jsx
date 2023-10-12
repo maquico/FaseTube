@@ -6,7 +6,7 @@ import {
 } from "react-bootstrap-icons";
 import { NavLink } from "react-router-dom";
 
-export default function Sidebar({isSignedIn=false}) {
+export default function Sidebar({isSignedIn=false, subscriptionsInfoMap}) {
   return (
     <aside className="w-1/6 px-2">
       <NavLink
