@@ -3,9 +3,10 @@ import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import Cookies from "js-cookie";
 
 export default function PrincipalPage() {
-  const [user_id, setUserId] = useState();
+  const [clerk_user_id, setUserId] = useState();
   const [videosInfos, setVideosInfos] = useState([]);
   const [channelInfoMap, setChannelInfoMap] = useState(new Map());
   const {isSignedIn, user} = useUser();
@@ -13,10 +14,25 @@ export default function PrincipalPage() {
   const [subscriptionsInfoMap, setSubscriptionsInfoMap] = useState(new Map());
 
   useEffect(() => {
-    if ( user === undefined || !isSignedIn) return;
-    setUserId(user.id);
-  }
-  , [user, isSignedIn]);
+    if (user === undefined || !isSignedIn) return;
+
+    // Make a request to your server to retrieve the user_id based on the Clerk ID
+    axios
+      .get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/user/id/?clave=${user.id}`)
+      .then((response) => {
+        // Assuming the API response contains the user_id
+        const user_id = response.data.user_id;
+        console.log(user_id)
+        setUserId(user_id);
+
+        // Set the user_id as a cookie
+        Cookies.set('user_id', user_id);
+        Cookies.set('clerk_user_id', user.id)
+      })
+      .catch((error) => {
+        console.error('Error fetching user ID:', error);
+      });
+  }, [user, isSignedIn]);
 
   useEffect(() => {
     // Make an Axios GET request to fetch data from the API endpoint
@@ -69,7 +85,7 @@ export default function PrincipalPage() {
       // Function to fetch suscripciones for a given user ID
       if (!isSignedIn) return;
       else{
-        axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/suscripciones/?suscriptor_clave=${user_id}`)
+        axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/suscripciones/?suscriptor_clave=${clerk_user_id}`)
           .then((response) => {
             console.log(response.data)
             setSubscriptions(response.data)
@@ -79,7 +95,7 @@ export default function PrincipalPage() {
           return null;
         });
       }
-    }, [user_id]);
+    }, [clerk_user_id]);
   
 
 
@@ -93,7 +109,7 @@ export default function PrincipalPage() {
 
   return (
     <div className="flex">
-      <Sidebar isSignedIn={isSignedIn} subscriptionsInfoMap={subscriptionsInfoMap}/>
+      <Sidebar isSignedIn={isSignedIn} subscriptionsInfoMap={subscriptionsInfoMap} user_id={clerk_user_id}/>
       <div className="w-5/6 h-fit">
         <div className="font-serif text-white text-2xl mx-2">
           <h1>Recientemente añadidos</h1>
