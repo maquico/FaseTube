@@ -6,7 +6,7 @@ import {
 } from "react-bootstrap-icons";
 import { NavLink } from "react-router-dom";
 
-export default function Sidebar({isSignedIn=false, subscriptionsInfoMap}) {
+export default function Sidebar({isSignedIn=false, subscriptionsInfoMap=null}) {
   return (
     <aside className="w-1/6 px-2">
       <NavLink
@@ -68,9 +68,7 @@ export default function Sidebar({isSignedIn=false, subscriptionsInfoMap}) {
                 Suscripciones
               </h2>
               {/* <hr className="my-2 invisible" /> */}
-              <Suscripciones />
-              <Suscripciones />
-              <Suscripciones />
+              <Suscripciones subscriptionsInfoMap={subscriptionsInfoMap}/>
               </div>
           </>
         )} 
@@ -78,13 +76,28 @@ export default function Sidebar({isSignedIn=false, subscriptionsInfoMap}) {
   );
 }
 
-const Suscripciones = () => {
+const Suscripciones = ({ subscriptionsInfoMap }) => {
+  console.log("subscriptionsInfoMap", subscriptionsInfoMap)
+  console.log("subscriptionsInfoMap[0]", subscriptionsInfoMap[0])
+  if (!subscriptionsInfoMap) {
+    // Handle the case when subscriptionsInfoMap is not defined
+    return null;
+  }
   return (
     <div className="flex w-full p-2 mx-2 columns-2 hover:bg-[#5A189A80] rounded-xl">
-      <div className="w-8 h-8 bg-white rounded-full" />
-      <h4 className="text-[#7B2CBF] font-serif flex mx-2 items-center">
-        Canal 1
-      </h4>
+      {[...subscriptionsInfoMap.entries()].map(([key, subscriptionInfo]) => (
+        <div key={key} className="flex w-full p-2 mx-2 items-center">
+          <div className="w-8 h-8 bg-white rounded-full">
+            {subscriptionInfo.foto_ruta && (
+              <img src={subscriptionInfo.foto_ruta} alt="" />
+            )}
+          </div>
+          <h4 className="text-[#7B2CBF] font-serif mx-2">
+            {subscriptionInfo.username}
+          </h4>
+        </div>
+      ))}
     </div>
   );
 };
+
