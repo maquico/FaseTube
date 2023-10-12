@@ -18,6 +18,7 @@ import CanalPage from "../pages/CanalPage";
 
 import App from "../App";
 import SubirVideoPage from "../pages/SubirVideoPage";
+import SuscripcionesPage from "../pages/SuscripcionesPage";
 
 const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 App.clerkPubKey = clerkPubKey;
@@ -38,6 +39,7 @@ const ClerkWithRoutes = () => {
         <Route path="/ver/:video" element={<VisualizadorPage />} />
         <Route path="/canal/:canal" element={<CanalPage />} />
         <Route path="/subir-video" element={<SubirVideoPage />} />
+        <Route path="/suscripciones" element={<SuscripcionesPage />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route
           path="/sign-in/*"

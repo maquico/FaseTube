@@ -9,9 +9,9 @@ export default function SubirVideoPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!isSignedIn) {
-    //   navigate("/");
-    // }
+    if (!isSignedIn) {
+      navigate("/");
+    }
   }, [isSignedIn]);
 
   return (

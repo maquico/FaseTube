@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/clerk-react";
 import {
   HouseDoorFill,
   CollectionPlayFill,
@@ -6,7 +7,13 @@ import {
 } from "react-bootstrap-icons";
 import { NavLink } from "react-router-dom";
 
-export default function Sidebar({isSignedIn=false, subscriptionsInfoMap=null}) {
+export default function Sidebar({
+  isSignedIn = false,
+  subscriptionsInfoMap = null,
+}) {
+  const { user } = useUser();
+  const userId = 1;
+
   return (
     <aside className="w-1/6 px-2">
       <NavLink
@@ -47,7 +54,7 @@ export default function Sidebar({isSignedIn=false, subscriptionsInfoMap=null}) {
       </NavLink>
 
       <NavLink
-        to="/mi-canal"
+        to={"/canal/" + userId}
         className={({ isActive }) =>
           isActive
             ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"
@@ -58,27 +65,26 @@ export default function Sidebar({isSignedIn=false, subscriptionsInfoMap=null}) {
         <p className="px-2 font-serif">Mi canal</p>
       </NavLink>
 
-      <hr className="m-4 border border-zinc-300 border-opacity-50" />
-
-        {/* If there's no user logged in dont show suscripciones, if there's show it */}
-        {isSignedIn === true && (
-          <>
-             <div className="w-full">
-              <h2 className="text-white font-serif text-xl w-full px-5 my-2">
-                Suscripciones
-              </h2>
-              {/* <hr className="my-2 invisible" /> */}
-              <Suscripciones subscriptionsInfoMap={subscriptionsInfoMap}/>
-              </div>
-          </>
-        )} 
-      </aside>
+      {/* If there's no user logged in dont show suscripciones, if there's show it */}
+      {isSignedIn === true && (
+        <>
+          <hr className="m-4 border border-zinc-300 border-opacity-50" />
+          <div className="w-full">
+            <h2 className="text-white font-serif text-xl w-full px-5 my-2">
+              Suscripciones
+            </h2>
+            {/* <hr className="my-2 invisible" /> */}
+            <Suscripciones subscriptionsInfoMap={subscriptionsInfoMap} />
+          </div>
+        </>
+      )}
+    </aside>
   );
 }
 
 const Suscripciones = ({ subscriptionsInfoMap }) => {
-  console.log("subscriptionsInfoMap", subscriptionsInfoMap)
-  console.log("subscriptionsInfoMap[0]", subscriptionsInfoMap[0])
+  console.log("subscriptionsInfoMap", subscriptionsInfoMap);
+  console.log("subscriptionsInfoMap[0]", subscriptionsInfoMap[0]);
   if (!subscriptionsInfoMap) {
     // Handle the case when subscriptionsInfoMap is not defined
     return null;
@@ -100,4 +106,3 @@ const Suscripciones = ({ subscriptionsInfoMap }) => {
     </div>
   );
 };
-
