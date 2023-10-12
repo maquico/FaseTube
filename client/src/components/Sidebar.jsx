@@ -48,7 +48,7 @@ export default function Sidebar({isSignedIn=false, subscriptionsInfoMap=null, cl
         <p className="px-2 font-serif">Videos que te gustan</p>
       </NavLink>
 
-      {isSignedIn === true && (
+      {isSignedIn === true && subscriptionsInfoMap !== null &&(
           <>
             <NavLink
         to={"/canal/" + clerk_user_id}
