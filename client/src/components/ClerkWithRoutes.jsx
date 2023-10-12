@@ -14,6 +14,7 @@ import VisualizadorPage from "../pages/VisualizadorPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import Topbar from "./Topbar";
 import BusquedaPage from "../pages/BusquedaPage";
+import CanalPage from "../pages/CanalPage";
 
 import App from "../App";
 
@@ -31,9 +32,10 @@ const ClerkWithRoutes = () => {
     >
       <Topbar />
       <Routes>
-        <Route path="/" element={<PrincipalPage/>} />
+        <Route path="/" element={<PrincipalPage />} />
         <Route path="/buscar/:busqueda" element={<BusquedaPage />} />
         <Route path="/ver/:video" element={<VisualizadorPage />} />
+        <Route path="/canal/:canal" element={<CanalPage />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route
           path="/sign-in/*"
@@ -64,11 +66,9 @@ const ClerkWithRoutes = () => {
           element={
             <>
               <SignedIn>
-                <ProtectedPage/>
+                <ProtectedPage />
               </SignedIn>
-              <SignedOut>
-            
-              </SignedOut>
+              <SignedOut></SignedOut>
             </>
           }
         />
