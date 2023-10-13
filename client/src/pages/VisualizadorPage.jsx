@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { HandThumbsUp, HandThumbsDown } from "react-bootstrap-icons";
 import RelatedVideo from "../components/RelatedVideo";
 import { useEffect, useState } from "react";
@@ -25,12 +25,89 @@ function formatDate(date) {
   const year = date.getFullYear();
 
   return `${day} de ${month} de ${year}`;
+
+}
+
+const fetchLikes = async (videoId) => {
+  try {
+    const response = await axios.get('https://fase-tube-server-c537f172c3b7.herokuapp.com/api/likes', { video_id: videoId });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching likes:', error);
+    return 0; // Handle the error as needed
+  }
+};
+
+// Function to fetch the number of dislikes
+const fetchDislikes = async (videoId) => {
+  try {
+    const response = await axios.get('https://fase-tube-server-c537f172c3b7.herokuapp.com/api/dislikes', { video_id: videoId });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching dislikes:', error);
+    return 0; // Handle the error as needed
+  }
+};
+
+const likeVideo = async (likesStates, setLikesStates, user_id, video_id, likes, setLikes, dislikes, setDislikes) => {
+  // Send a request to the API to like the video
+  let isLiked = 0;
+  try {
+    if (likesStates === 0) {
+      isLiked = 1;
+      setLikesStates(1);
+      setLikes(likes + 1);
+    } else if(likesStates === 1){
+      isLiked = 0;
+      setLikesStates(0);
+      setLikes(likes - 1);
+    } else{
+      isLiked = 1;
+      setLikesStates(1);
+      setLikes(likes + 1);
+      setDislikes(dislikes - 1)
+    }
+    await axios.put('https://fase-tube-server-c537f172c3b7.herokuapp.com/api/update_video', { user_id, video_id, isLiked: isLiked});
+     // Update the number of likes in the state
+  } catch (error) {
+    console.error('Error liking the video:', error);
+  }
+};
+
+const dislikeVideo = async (likesStates, setLikesStates, user_id, video_id, likes, setLikes, dislikes, setDislikes) => {
+  // Send a request to the API to dislike the video
+  let isLiked = 0;
+  try {
+    if (likesStates === 0) {
+      isLiked = -1;
+      setLikesStates(-1);
+      setDislikes(dislikes + 1); 
+    } else if(likesStates === -1){
+      isLiked = 0;
+      setLikesStates(0);
+      setDislikes(dislikes - 1);
+    } else{
+      isLiked = -1;
+      setLikesStates(-1);
+      setDislikes(dislikes + 1);
+      setLikes(likes - 1);
+    }
+    await axios.put('https://fase-tube-server-c537f172c3b7.herokuapp.com/api/update_video', { user_id, video_id, isLiked: isLiked});
+  } catch (error) {
+    console.error('Error disliking the video:', error);
+  }
 }
 
 export default function VisualizadorPage() {
   const { video } = useParams();
   const [videoInfo, setVideoInfo] = useState({});
   const [canalInfo, setCanalInfo] = useState({});
+  const [likes, setLikes] = useState(0);
+  const [dislikes, setDislikes] = useState(0);
+  const [likesStates, setLikesStates] = useState(0); 
+  const [canalId, setCanalId] = useState();
+
+  
 
   useEffect(() => {
     axios
@@ -40,12 +117,31 @@ export default function VisualizadorPage() {
       .then((res) => {
         console.log(res.data);
         setVideoInfo(res.data);
-        fetchCanal(res.data.user_id);
+        console.log("Dentro de useEffect: ", res.data.user_id)
+        setCanalId(res.data.user_id);
+        fetchCanal(canalId);
       })
       .catch((error) => console.error("Error fetching video: ", error));
   }, [video]);
 
+
+  useEffect(() => {
+    // Fetch the like and dislike counts for the current video
+    fetchLikes(video).then((likesCount) => {
+      console.log("likesCount", likesCount)
+      setLikes(likesCount);
+    });
+  
+    fetchDislikes(video).then((dislikesCount) => {
+      console.log("dislikesCount", dislikesCount)
+      setDislikes(dislikesCount);
+    });
+  
+    // Rest of your code
+  }, [video]);
+
   const fetchCanal = (canal_id) => {
+    console.log("Dentro de fetchCanal: ", canal_id)
     axios
       .get(
         `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${canal_id}`
@@ -99,14 +195,23 @@ export default function VisualizadorPage() {
                 Suscribirse
               </button>
             </div>
-
             {/* Botón de like */}
             <div className="flex ml-auto">
               <div className="w-28 h-10 bg-violet-900 bg-opacity-30 rounded-2xl border-2 border-zinc-300 border-opacity-30 flex items-center px-3">
-                <HandThumbsUp color="white" />
-                <p className="text-white font-serif mx-1">{videoInfo.likes}</p>
-                {/* <div className="w-10 rotate-90 border ml-auto"></div> */}
-                <HandThumbsDown color="white" className="ml-auto" />
+                <Link
+                  onClick={() => likeVideo(likesStates, setLikesStates, canalId, video, likes, setLikes, dislikes, setDislikes)}
+                  className={`text-white font-serif mx-1 ${likesStates === 1 ? 'text-purple-500' : ''}`}
+                >
+                  <HandThumbsUp className={likesStates === 1 ? 'text-purple-500' : 'text-white'} />
+                </Link>
+                <p className="text-white font-serif mx-1">{likes}</p> {/* Display the number of likes here */}
+                <Link
+                  onClick={() => dislikeVideo(likesStates, setLikesStates, canalId, video, likes, setLikes, dislikes, setDislikes)}
+                  className={`text-white font-serif mx-1 ${likesStates === -1 ? 'text-purple-500' : ''}`}
+                >
+                  <HandThumbsDown className={likesStates === -1 ? 'text-purple-500' : 'text-white'} />
+                </Link>
+                <p className="text-white font-serif mx-1">{dislikes}</p> {/* Display the number of dislikes here */}
               </div>
             </div>
           </div>
@@ -185,3 +290,6 @@ const Comentario = ({ canal, comentario }) => {
     </div>
   );
 };
+
+
+
