@@ -2,16 +2,23 @@ import Sidebar from "../components/Sidebar";
 import LargeCardVideo from "../components/LargeCardVideo";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 export default function LikedVideosPage() {
+  const { isSignedIn } = useUser();
+  const navigate = useNavigate();
+
   const [likedVideos, setLikedVideos] = useState([]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get()
-  //     .then((response) => setLikedVideos(response.data))
-  //     .catch((error) => console.error("Error fetching videos:", error));
-  // }, []);
+  useEffect(() => {
+    if (!isSignedIn) navigate("/");
+
+    // axios
+    //   .get()
+    //   .then((response) => setLikedVideos(response.data))
+    //   .catch((error) => console.error("Error fetching videos:", error));
+  }, [isSignedIn]);
 
   return (
     <div className="flex">

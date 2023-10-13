@@ -80,9 +80,9 @@ function CanalCardVideo() {
           <h3 className="text-lg">Nombre del vídeo</h3>
           <p className="text-sm text-opacity-60">123 vistas · Hace 1 mes</p>
         </div>
-        <button className="flex items-center bg-purple-900 m-2 p-2 rounded-lg">
+        {/* <button className="flex items-center bg-purple-900 m-2 p-2 rounded-lg">
           <PencilSquare size={20} color="white" />
-        </button>
+        </button> */}
         {/* <button className="flex items-center bg-purple-900 m-2 p-2 rounded-lg">
           <Trash3 size={20} color="white" />
         </button> */}

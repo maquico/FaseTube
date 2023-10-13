@@ -132,7 +132,6 @@ const checkCurrentLikeStatus = async (user_id, video_id) => {
   }
 };
 
-
 export default function VisualizadorPage() {
   const { video } = useParams();
   const [videoInfo, setVideoInfo] = useState({});
@@ -245,9 +244,14 @@ export default function VisualizadorPage() {
               <img className="rounded-full" src={canalInfo.foto_ruta}></img>
             </div>
             <div className="w-fit mx-3">
-              <h2 className="font-serif text-white whitespace-nowrap overflow-hidden">
-                {canalInfo.username}
-              </h2>
+              <Link to={"/canal/" + canalId}>
+                <h2 className="font-serif text-white whitespace-nowrap overflow-hidden">
+                  {canalInfo.username}
+                </h2>
+                <p className="font-serif text-white text-opacity-30 whitespace-nowrap overflow-hidden">
+                  {canalInfo.nombres} {canalInfo.apellidos}
+                </p>
+              </Link>
             </div>
 
             {/* Botón de suscripción */}
@@ -297,7 +301,9 @@ export default function VisualizadorPage() {
 
           {/* Añadir comentario */}
           <div className="flex columns-3 my-2 w-[930px]">
-            <div className="w-10 h-10 rounded-full bg-purple-700"></div>
+            <div className="w-10 h-10 rounded-full">
+              <img src={canalInfo.foto_ruta} />
+            </div>
             <input
               type="text"
               placeholder="Añade tu comentario"
