@@ -98,6 +98,40 @@ const dislikeVideo = async (likesStates, setLikesStates, user_id, video_id, like
   }
 }
 
+const fetchCanal = (canal_id, setCanalInfo) => {
+  console.log("Dentro de fetchCanal: ", canal_id)
+  axios
+    .get(
+      `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${canal_id}`
+    )
+    .then((res) => {
+      // console.log(res.data);
+      setCanalInfo(res.data);
+    })
+    .catch((error) => console.error("Error fetching canal: ", error));
+};
+
+const checkCurrentLikeStatus = async (user_id, video_id) => {
+  if (isNaN(user_id) || isNaN(video_id)) {
+    // Handle invalid user_id or video_id here, e.g., return an error response.
+    return;
+  }
+  console.log("Dentro de checkCurrentLikeStatus: ", user_id, video_id)
+  try {
+    const response = await axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/likes/status/`, {
+      params: {
+        user_id: user_id,
+        video_id: video_id,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error checking like status:', error);
+    return null; // Handle the error as needed
+  }
+};
+
+
 export default function VisualizadorPage() {
   const { video } = useParams();
   const [videoInfo, setVideoInfo] = useState({});
@@ -119,7 +153,7 @@ export default function VisualizadorPage() {
         setVideoInfo(res.data);
         console.log("Dentro de useEffect: ", res.data.user_id)
         setCanalId(res.data.user_id);
-        fetchCanal(canalId);
+        fetchCanal(res.data.user_id, setCanalInfo);
       })
       .catch((error) => console.error("Error fetching video: ", error));
   }, [video]);
@@ -138,20 +172,29 @@ export default function VisualizadorPage() {
     });
   
     // Rest of your code
-  }, [video]);
+  }, [video, canalId]);
 
-  const fetchCanal = (canal_id) => {
-    console.log("Dentro de fetchCanal: ", canal_id)
-    axios
-      .get(
-        `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${canal_id}`
-      )
-      .then((res) => {
-        // console.log(res.data);
-        setCanalInfo(res.data);
-      })
-      .catch((error) => console.error("Error fetching canal: ", error));
-  };
+  
+
+  useEffect(() => {
+    const check_canalId = parseInt(canalId, 10); // Parse to integer with base 10
+    const check_videoId = parseInt(video, 10);
+
+    // Fetch the initial like/dislike status for the current user and video
+    checkCurrentLikeStatus(check_canalId, check_videoId).then((likeStatus) => {
+      if (likeStatus.isLiked !== 0) {
+        // Handle the like/dislike status, e.g., set your component state accordingly
+        if (likeStatus.isLiked === 1) {
+          // The user has liked the video
+          setLikesStates(1);
+        } else if (likeStatus.isLiked === -1) {
+          // The user has disliked the video
+          setLikesStates(-1);
+        }
+      }
+      console.log("CURRENT STATUS: ", likesStates)
+    });
+  }, [canalId, videoInfo]);
 
   return (
     <div className="flex columns-3">
