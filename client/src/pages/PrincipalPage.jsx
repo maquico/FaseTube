@@ -15,7 +15,6 @@ export default function PrincipalPage() {
 
   useEffect(() => {
     if (user === undefined || !isSignedIn) return;
-
     // Make a request to your server to retrieve the user_id based on the Clerk ID
     axios
       .get(
