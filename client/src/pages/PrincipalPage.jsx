@@ -23,11 +23,17 @@ export default function PrincipalPage() {
       .then((response) => {
         // Assuming the API response contains the user_id
         const user_id = response.data.user_id;
-        setUserId(user_id);
+        const username = response.data.username;
+        const foto_ruta = response.data.foto_ruta;
+        console.log("username", response.data.username); 
+        console.log("foto_ruta", response.data.foto_ruta);
+        setUserId(user.id);
 
         // Set the user_id as a cookie
         Cookies.set("user_id", user_id);
         Cookies.set("clerk_user_id", user.id);
+        Cookies.set("foto_ruta", foto_ruta);
+        Cookies.set("username", username);
         localStorage.setItem("user_id", user_id);
       })
       .catch((error) => {

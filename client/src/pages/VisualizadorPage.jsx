@@ -1,9 +1,17 @@
 import { useParams, Link, json } from "react-router-dom";
 import { HandThumbsUp, HandThumbsDown } from "react-bootstrap-icons";
 import RelatedVideo from "../components/RelatedVideo";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Comments from '../components/Comments';
+import Cookies from "js-cookie";
+
+//log cookies
+console.log("Cookies: ", Cookies.get("user_id"));
+console.log("Cookies: ", Cookies.get("clerk_user_id"));
+console.log("Cookies: ", Cookies.get("foto_ruta"));
+console.log("Cookies: ", Cookies.get("username"));
+
 
 function formatDate(date) {
   const nombreMes = [
@@ -50,8 +58,9 @@ const fetchDislikes = async (videoId) => {
   }
 };
 
-const likeVideo = async (likesStates, setLikesStates, user_id, video_id, likes, setLikes, dislikes, setDislikes) => {
+const likeVideo = async (likesStates, setLikesStates, user_id_string, video_id, likes, setLikes, dislikes, setDislikes) => {
   // Send a request to the API to like the video
+  const user_id = parseInt(user_id_string, 10); // Parse to integer with base 10
   let isLiked = 0;
   try {
     if (likesStates === 0) {
@@ -75,8 +84,9 @@ const likeVideo = async (likesStates, setLikesStates, user_id, video_id, likes, 
   }
 };
 
-const dislikeVideo = async (likesStates, setLikesStates, user_id, video_id, likes, setLikes, dislikes, setDislikes) => {
+const dislikeVideo = async (likesStates, setLikesStates, user_id_string, video_id, likes, setLikes, dislikes, setDislikes) => {
   // Send a request to the API to dislike the video
+  const user_id = parseInt(user_id_string, 10); // Parse to integer with base 10
   let isLiked = 0;
   try {
     if (likesStates === 0) {
@@ -132,8 +142,53 @@ const checkCurrentLikeStatus = async (user_id, video_id) => {
   }
 };
 
+const postComment = async (newComment, user_id, video_id, commentInputRef, setNewComment, setComments) => {
+  if (!newComment.trim()) {
+    // Don't post empty comments
+    return;
+  }
+
+  try {
+    // Send a POST request to your API to create a new comment
+    const response = await axios.post('https://fase-tube-server-c537f172c3b7.herokuapp.com/api/comments/create', {
+      _contenido: newComment,
+      _parentID: null, // You may modify this based on your requirements
+      _user_id: user_id, // Replace with the actual user ID
+      _video_id: video_id, // Replace with the actual video ID
+    });
+
+    // Clear the comment input field
+    setNewComment('');
+    if (commentInputRef.current) {
+      commentInputRef.current.value = '';
+    }
+
+    const commentData = response.data;
+    if (commentData.USUARIOS) {
+      commentData.USUARIOS.foto_ruta = Cookies.get("foto_ruta");
+      commentData.USUARIOS.username = Cookies.get("username");
+    } else {
+      // Handle missing user information here (e.g., provide defaults)
+      commentData.USUARIOS = {
+        foto_ruta: Cookies.get("foto_ruta"),
+        username: Cookies.get("username"),
+      }
+    }
+    // Add the new comment to the comments list (you can modify this part)
+    setComments((prevComments) => [
+      ...prevComments,
+      commentData,
+    ]);
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    // Handle errors as needed
+  }
+};
+
+
 
 export default function VisualizadorPage() {
+  const currentUserId = Cookies.get("user_id");
   const { video } = useParams();
   const [videoInfo, setVideoInfo] = useState({});
   const [canalInfo, setCanalInfo] = useState({});
@@ -142,6 +197,9 @@ export default function VisualizadorPage() {
   const [likesStates, setLikesStates] = useState(0); 
   const [canalId, setCanalId] = useState();
   const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const commentInputRef = useRef();
+
 
   useEffect(() => {
     axios
@@ -157,6 +215,7 @@ export default function VisualizadorPage() {
       })
       .catch((error) => console.error("Error fetching video: ", error));
   }, [video]);
+
 
   useEffect(() => {
     // Make an HTTP request to the backend to fetch the comments
@@ -198,11 +257,11 @@ export default function VisualizadorPage() {
   
 
   useEffect(() => {
-    const check_canalId = parseInt(canalId, 10); // Parse to integer with base 10
+    const check_userId = parseInt(currentUserId, 10); // Parse to integer with base 10
     const check_videoId = parseInt(video, 10);
 
     // Fetch the initial like/dislike status for the current user and video
-    checkCurrentLikeStatus(check_canalId, check_videoId).then((likeStatus) => {
+    checkCurrentLikeStatus(check_userId, check_videoId).then((likeStatus) => {
       if (likeStatus.isLiked !== 0) {
         // Handle the like/dislike status, e.g., set your component state accordingly
         if (likeStatus.isLiked === 1) {
@@ -221,7 +280,7 @@ export default function VisualizadorPage() {
     <div className="flex columns-3">
       {/* Columna invisible */}
       <div className="w-20" />
-
+ 
       {/* Video */}
       <div className="w-[971px]">
         {/* Visualizador */}
@@ -260,14 +319,14 @@ export default function VisualizadorPage() {
             <div className="flex ml-auto">
               <div className="w-28 h-10 bg-violet-900 bg-opacity-30 rounded-2xl border-2 border-zinc-300 border-opacity-30 flex items-center px-3">
                 <Link
-                  onClick={() => likeVideo(likesStates, setLikesStates, canalId, video, likes, setLikes, dislikes, setDislikes)}
+                  onClick={() => likeVideo(likesStates, setLikesStates, currentUserId, video, likes, setLikes, dislikes, setDislikes)}
                   className={`text-white font-serif mx-1 ${likesStates === 1 ? 'text-purple-500' : ''}`}
                 >
                   <HandThumbsUp className={likesStates === 1 ? 'text-purple-500' : 'text-white'} />
                 </Link>
                 <p className="text-white font-serif mx-1">{likes}</p> {/* Display the number of likes here */}
                 <Link
-                  onClick={() => dislikeVideo(likesStates, setLikesStates, canalId, video, likes, setLikes, dislikes, setDislikes)}
+                  onClick={() => dislikeVideo(likesStates, setLikesStates, currentUserId, video, likes, setLikes, dislikes, setDislikes)}
                   className={`text-white font-serif mx-1 ${likesStates === -1 ? 'text-purple-500' : ''}`}
                 >
                   <HandThumbsDown className={likesStates === -1 ? 'text-purple-500' : 'text-white'} />
@@ -301,11 +360,17 @@ export default function VisualizadorPage() {
             <input
               type="text"
               placeholder="Añade tu comentario"
-              className="bg-transparent text-white border-b-2 w-[800px] mx-4 focus:outline-none font-serif"
-            />
-            <button className="ml-auto bg-purple-700 rounded-full px-4 font-serif text-white">
-              Comentar
-            </button>
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="bg-transparent text-white border-b-2 w-[800px] mx-4 focus:outline-none font-serif"/>
+
+          <button
+            onClick={() => postComment(newComment, currentUserId, video, commentInputRef, setNewComment, setComments)}
+            className="ml-auto bg-purple-700 rounded-full px-4 font-serif text-white"
+          >
+            Comentar
+          </button>
+
           </div>
 
           {/* Comentarios publicados */}
