@@ -25,44 +25,46 @@ export default function Sidebar({ subscriptionsInfoMap = null }) {
         <p className="px-2 font-serif">Principal</p>
       </NavLink>
 
-      <NavLink
-        to="/suscripciones"
-        className={({ isActive }) =>
-          isActive
-            ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"
-            : "flex px-5 items-center mt-2 w-full h-10 rounded-xl text-violet-500 hover:bg-violet-900 hover:bg-opacity-30"
-        }
-      >
-        <CollectionPlayFill size={20} />
-        <p className="px-2 font-serif">Suscripciones</p>
-      </NavLink>
-
-      <NavLink
-        to="/liked-videos"
-        className={({ isActive }) =>
-          isActive
-            ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"
-            : "flex px-5 items-center mt-2 w-full h-10 rounded-xl text-violet-500 hover:bg-violet-900 hover:bg-opacity-30"
-        }
-      >
-        <HandThumbsUpFill size={20} />
-        <p className="px-2 font-serif">Videos que te gustan</p>
-      </NavLink>
+      {isSignedIn && (
+        <NavLink
+          to="/suscripciones"
+          className={({ isActive }) =>
+            isActive
+              ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"
+              : "flex px-5 items-center mt-2 w-full h-10 rounded-xl text-violet-500 hover:bg-violet-900 hover:bg-opacity-30"
+          }
+        >
+          <CollectionPlayFill size={20} />
+          <p className="px-2 font-serif">Suscripciones</p>
+        </NavLink>
+      )}
 
       {isSignedIn && (
-        <>
-          <NavLink
-            to={"/canal/" + localStorage.getItem("user_id")}
-            className={({ isActive }) =>
-              isActive
-                ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"
-                : "flex px-5 items-center mt-2 w-full h-10 rounded-xl text-violet-500 hover:bg-violet-900 hover:bg-opacity-30"
-            }
-          >
-            <CameraReelsFill size={20} />
-            <p className="px-2 font-serif">Mi canal</p>
-          </NavLink>
-        </>
+        <NavLink
+          to="/liked-videos"
+          className={({ isActive }) =>
+            isActive
+              ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"
+              : "flex px-5 items-center mt-2 w-full h-10 rounded-xl text-violet-500 hover:bg-violet-900 hover:bg-opacity-30"
+          }
+        >
+          <HandThumbsUpFill size={20} />
+          <p className="px-2 font-serif">Videos que te gustan</p>
+        </NavLink>
+      )}
+
+      {isSignedIn && (
+        <NavLink
+          to={"/canal/" + localStorage.getItem("user_id")}
+          className={({ isActive }) =>
+            isActive
+              ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"
+              : "flex px-5 items-center mt-2 w-full h-10 rounded-xl text-violet-500 hover:bg-violet-900 hover:bg-opacity-30"
+          }
+        >
+          <CameraReelsFill size={20} />
+          <p className="px-2 font-serif">Mi canal</p>
+        </NavLink>
       )}
 
       {/* If there's no user logged in dont show suscripciones, if there's show it */}
