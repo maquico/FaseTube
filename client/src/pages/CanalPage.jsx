@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { PencilSquare } from "react-bootstrap-icons";
+import { PencilSquare, Trash, Trash2, Trash3 } from "react-bootstrap-icons";
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
@@ -33,10 +33,13 @@ export default function CanalPage() {
           </div>
           <div className="font-serif text-white">
             <br />
-            <h1 className="text-3xl">{canalInfo.username}</h1>
-            <p className="text-xl">ID: {canal}</p>
+            <br />
+            <h1 className="text-3xl">
+              {canalInfo.nombres} {canalInfo.apellidos}
+            </h1>
+            <p className="text-xl">@{canalInfo.username}</p>
             {/* <p className="text-xl">Usuario: </p>
-            <p>Descripción: </p> */}
+            <p>Descripción: {canalInfo.descripcion}</p> */}
           </div>
         </div>
         {/* Menu */}
@@ -72,14 +75,17 @@ function CanalCardVideo() {
           </span>
         </div>
       </Link>
-      <div className="flex columns-2 px-1 py-3">
+      <div className="flex columns-3 px-1 py-3">
         <div className="w-full">
           <h3 className="text-lg">Nombre del vídeo</h3>
           <p className="text-sm text-opacity-60">123 vistas · Hace 1 mes</p>
         </div>
-        <div className="flex items-center bg-purple-900 m-2 p-2 rounded-lg">
+        <button className="flex items-center bg-purple-900 m-2 p-2 rounded-lg">
           <PencilSquare size={20} color="white" />
-        </div>
+        </button>
+        {/* <button className="flex items-center bg-purple-900 m-2 p-2 rounded-lg">
+          <Trash3 size={20} color="white" />
+        </button> */}
       </div>
     </div>
   );
