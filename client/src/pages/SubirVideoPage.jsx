@@ -4,10 +4,21 @@ import { Upload } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+function extractName(filename) {
+  const parts = filename.split("\\");
+  return parts.pop();
+}
+
+// .resize(640, 360)
+const comprimirVideo = async (videoFile) => {
+  return videoFile;
+};
+
 export default function SubirVideoPage() {
   const { isSignedIn } = useUser();
   const [resultado, setResultado] = useState("");
 
+  const [videoName, setVideoName] = useState("");
   const [videoFile, setVideoFile] = useState(null);
   const [miniaturaFile, setMiniaturaFile] = useState(null);
   const [titulo, setTitulo] = useState("");
@@ -16,7 +27,18 @@ export default function SubirVideoPage() {
 
   const user_id = localStorage.getItem("user_id");
 
-  const handleVideoFile = (event) => setVideoFile(event.target.files[0]);
+  const handleVideoFile = async (event) => {
+    setVideoName(extractName(event.target.value));
+
+    setVideoFile(event.target.files[0]);
+    // const blob = new Blob([compressedVideo], { type: "video/mp4" });
+    // const url = URL.createObjectURL(blob);
+
+    // const a = document.createElement("a");
+    // a.href = url;
+    // a.download = extractName(event.target.value);
+    // a.click();
+  };
   const handleMiniaturaFile = (event) =>
     setMiniaturaFile(event.target.files[0]);
   const handleTitulo = (event) => setTitulo(event.target.value);
@@ -45,16 +67,17 @@ export default function SubirVideoPage() {
     formData.append("visibilidad_id", visibilidad);
     formData.append("user_id", user_id);
 
-    axios
-      .post(
-        "https://fase-tube-server-c537f172c3b7.herokuapp.com/api/videos/upload",
-        formData
-      )
-      .then((response) =>
-        setResultado(
-          `${response.data.message} (Duración estimada: ${response.data.duration} segundos)`
-        )
-      );
+    setResultado("Subiendo...");
+    // axios
+    //   .post(
+    //     "https://fase-tube-server-c537f172c3b7.herokuapp.com/api/videos/upload",
+    //     formData
+    //   )
+    //   .then((response) =>
+    //     setResultado(
+    //       `${response.data.message} (Duración estimada: ${response.data.duration} segundos)`
+    //     )
+    //   );
   };
 
   return (
