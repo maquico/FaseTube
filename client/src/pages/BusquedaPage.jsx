@@ -1,8 +1,19 @@
 import { useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function BusquedaPage() {
   const { busqueda } = useParams();
+
+  const [resultados, setResultados] = useState([]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`un string que no conozco ${busqueda}`)
+  //     .then((response) => setResultados(response.data))
+  //     .catch((error) => console.error("Error fetching videos:", error));
+  // }, []);
 
   return (
     <div className="flex">
@@ -11,41 +22,15 @@ export default function BusquedaPage() {
         <div className="font-serif text-white mx-2">
           <h1 className="text-2xl">Resultados de la busqueda: {busqueda}</h1>
           <div className="w-[70vw] my-4">
-            <LargeCardVideo
-              titulo="Titulo 1"
-              vistas={123}
-              tiempoSubido="Hace 2 días"
-              canal="TheBestChannel"
-              descripcion="Hola 1"
-            />
-            <LargeCardVideo
-              titulo="Titulo 2"
-              vistas={123}
-              tiempoSubido="Hace 2 días"
-              canal="TheBestChannel"
-              descripcion="Hola 2"
-            />
-            <LargeCardVideo
-              titulo="Titulo 3"
-              vistas={123}
-              tiempoSubido="Hace 2 días"
-              canal="TheBestChannel"
-              descripcion="Hola 3"
-            />
-            <LargeCardVideo
-              titulo="Titulo 4"
-              vistas={123}
-              tiempoSubido="Hace 2 días"
-              canal="TheBestChannel"
-              descripcion="Hola 4"
-            />
-            <LargeCardVideo
-              titulo="Titulo 5"
-              vistas={123}
-              tiempoSubido="Hace 2 días"
-              canal="TheBestChannel"
-              descripcion="Hola 5"
-            />
+            {resultados.map((video) => {
+              <LargeCardVideo
+                titulo={video.titulo}
+                vistas={video.vistas}
+                tiempoSubido={video.tiempoSubido}
+                canal={video.canal}
+                descripcion={video.descripcion}
+              />;
+            })}
           </div>
         </div>
       </div>
