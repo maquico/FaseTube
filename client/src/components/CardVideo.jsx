@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 export default function CardVideo({
   id,
   nombreVideo = "",
@@ -28,8 +28,8 @@ export default function CardVideo({
   return (
     <div className="w-72 my-4 mx-2">
       {/* Miniatura */}
-      <Link to={"/ver/" + id}>
-        <div className="flex h-44 rounded-lg justify-end items-start">
+      <Link to={"/ver/" + id} onClick={() => watchVideo(id)}>
+        <div className="flex h-44 rounded-lg bg-white justify-end items-start">
           <img className="w-full h-full rounded-lg" src={miniatura_final} alt="Miniatura" />
           <span className="absolute bg-black opacity-90 m-2 p-1 rounded-md text-white text-sm font-serif z-30">
             {duracionFormateada}
@@ -63,3 +63,14 @@ export default function CardVideo({
     </div>
   );
 }
+const watchVideo = async (videoId) => {
+  try {
+    // Make a POST request to your backend to increment the view count
+    const response = await axios.post('https://fase-tube-server-c537f172c3b7.herokuapp.com//api/increment-views', { video_id: videoId });
+    // Handle the response if needed
+    console.log('Video views updated:', response.data);
+  } catch (error) {
+    // Handle any errors that may occur during the request
+    console.error('Error updating video views:', error);
+  }
+};
