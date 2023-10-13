@@ -1,18 +1,30 @@
 import { useUser } from "@clerk/clerk-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Upload } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 
 export default function SubirVideoPage() {
   const { isSignedIn } = useUser();
+  const [resultado, setResultado] = useState("");
+  const [videoFile, setVideoFile] = useState(null);
+  const [miniaturaFile, setMiniaturaFile] = useState(null);
+
+  const handleVideoFile = (event) => setVideoFile(event.target.files[0]);
+  const handleMiniaturaFile = (event) => setVideoFile(event.target.files[0]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isSignedIn) {
-      navigate("/");
-    }
+    if (!isSignedIn) navigate("/");
   }, [isSignedIn]);
+
+  // const formData = new FormData();
+  // formData.append("vidFile", videoFile);
+  // formData.append("imgFile", videoFile);
+  // formData.append("titulo", titulo);
+  // formData.append("descripcion", descripcion);
+
+  const subirVideo = () => {};
 
   return (
     <div className="flex justify-center align-middle">
@@ -23,6 +35,7 @@ export default function SubirVideoPage() {
           type="file"
           accept="video/mp4,video/x-m4v,video/*"
           className="p-1 px-3 bg-[#5a189a] bg-opacity-30 text-white rounded-lg focus:outline-none"
+          id="subirVideo"
         />
         <br />
         <label className="text-white">Miniatura: </label>
@@ -30,6 +43,7 @@ export default function SubirVideoPage() {
           type="file"
           accept="image/png, image/jpeg"
           className="p-1 px-3 bg-[#5a189a] bg-opacity-30 text-white rounded-lg focus:outline-none"
+          id="subirMiniatura"
         />
         <br />
         <label className="text-white">Título: </label>
@@ -59,6 +73,8 @@ export default function SubirVideoPage() {
           <Upload size={20} color="white" />
           <p className="px-4">Subir</p>
         </button>
+        <br />
+        <p className="text-white text-center">Resultado: {resultado}</p>
       </div>
     </div>
   );

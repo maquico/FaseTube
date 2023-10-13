@@ -38,7 +38,7 @@ export default function VisualizadorPage() {
         `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/videos/id/?video_id=${video}`
       )
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setVideoInfo(res.data);
         fetchCanal(res.data.user_id);
       })
@@ -51,7 +51,7 @@ export default function VisualizadorPage() {
         `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${canal_id}`
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setCanalInfo(res.data);
       })
       .catch((error) => console.error("Error fetching canal: ", error));
@@ -65,7 +65,7 @@ export default function VisualizadorPage() {
       {/* Video */}
       <div className="w-[971px]">
         {/* Visualizador */}
-        <div className="w-[930px] h-[523px] flex bg-zinc-300 rounded-xl justify-center">
+        <div className="w-[930px] h-[523px] flex rounded-xl justify-center">
           <video
             src={`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/videos/watch/?video_id=${video}`}
             className="w-[930px] h-[523px] object-cover focus:outline-none rounded-xl"

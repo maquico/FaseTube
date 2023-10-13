@@ -109,7 +109,8 @@ export default function PrincipalPage() {
 
   return (
     <div className="flex">
-      <Sidebar isSignedIn={isSignedIn} subscriptionsInfoMap={subscriptionsInfoMap} user_id={clerk_user_id}/>
+      {/* <Sidebar isSignedIn={isSignedIn} subscriptionsInfoMap={subscriptionsInfoMap} user_id={clerk_user_id}/> */}
+      <Sidebar />
       <div className="w-5/6 h-fit">
         <div className="font-serif text-white text-2xl mx-2">
           <h1>Recientemente añadidos</h1>
