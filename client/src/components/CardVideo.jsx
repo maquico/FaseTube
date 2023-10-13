@@ -66,7 +66,7 @@ export default function CardVideo({
 const watchVideo = async (videoId) => {
   try {
     // Make a POST request to your backend to increment the view count
-    const response = await axios.post('https://fase-tube-server-c537f172c3b7.herokuapp.com//api/videos/views/add', { video_id: videoId });
+    const response = await axios.put('https://fase-tube-server-c537f172c3b7.herokuapp.com//api/videos/views/add', { video_id: videoId });
     // Handle the response if needed
     console.log('Video views updated:', response.data);
   } catch (error) {

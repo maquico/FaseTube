@@ -22,12 +22,12 @@ export default function PrincipalPage() {
       .then((response) => {
         // Assuming the API response contains the user_id
         const user_id = response.data.user_id;
-        console.log(user_id)
         setUserId(user_id);
 
         // Set the user_id as a cookie
         Cookies.set('user_id', user_id);
         Cookies.set('clerk_user_id', user.id)
+      
       })
       .catch((error) => {
         console.error('Error fetching user ID:', error);
