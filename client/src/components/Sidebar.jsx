@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/clerk-react";
 import {
   HouseDoorFill,
   CollectionPlayFill,
@@ -6,11 +7,9 @@ import {
 } from "react-bootstrap-icons";
 import { NavLink, Link } from "react-router-dom";
 
-export default function Sidebar({
-  isSignedIn = false,
-  subscriptionsInfoMap = null,
-  clerk_user_id = null,
-}) {
+export default function Sidebar({ subscriptionsInfoMap = null }) {
+  const { isSignedIn } = useUser();
+
   return (
     <aside className="w-1/6 px-2">
       <NavLink
@@ -50,10 +49,10 @@ export default function Sidebar({
         <p className="px-2 font-serif">Videos que te gustan</p>
       </NavLink>
 
-      {isSignedIn === true && subscriptionsInfoMap !== null && (
+      {isSignedIn && (
         <>
           <NavLink
-            to={"/canal/" + clerk_user_id}
+            to={"/canal/" + localStorage.getItem("user_id")}
             className={({ isActive }) =>
               isActive
                 ? "flex px-5 items-center mt-2 w-full h-10 bg-violet-500 rounded-xl hover:bg-violet-600"

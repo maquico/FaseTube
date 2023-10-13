@@ -7,6 +7,7 @@ import {
   SignedOut,
 } from "@clerk/clerk-react";
 import { esES } from "@clerk/localizations";
+import { dark } from "@clerk/themes";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import ProtectedPage from "../ProtectedPage";
 import PrincipalPage from "../pages/PrincipalPage";
@@ -31,6 +32,17 @@ const ClerkWithRoutes = () => {
       localization={esES}
       publishableKey={clerkPubKey}
       navigate={(to) => navigate(to)}
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#5a189a",
+          colorBackground: "#24004680",
+          fontFamily: "Jockey One",
+          colorAlphaShade: "#7B2CBF",
+          borderRadius: "0.75rem",
+          colorTextSecondary: "white",
+        },
+      }}
     >
       <Topbar />
       <Routes>
