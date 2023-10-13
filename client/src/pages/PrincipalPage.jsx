@@ -9,7 +9,7 @@ export default function PrincipalPage() {
   const [clerk_user_id, setUserId] = useState();
   const [videosInfos, setVideosInfos] = useState([]);
   const [channelInfoMap, setChannelInfoMap] = useState(new Map());
-  const {isSignedIn, user} = useUser();
+  const { isSignedIn, user } = useUser();
   const [subscriptions, setSubscriptions] = useState([]);
   const [subscriptionsInfoMap, setSubscriptionsInfoMap] = useState(new Map());
 
@@ -18,19 +18,21 @@ export default function PrincipalPage() {
 
     // Make a request to your server to retrieve the user_id based on the Clerk ID
     axios
-      .get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/user/id/?clave=${user.id}`)
+      .get(
+        `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/user/id/?clave=${user.id}`
+      )
       .then((response) => {
         // Assuming the API response contains the user_id
         const user_id = response.data.user_id;
         setUserId(user_id);
 
         // Set the user_id as a cookie
-        Cookies.set('user_id', user_id);
-        Cookies.set('clerk_user_id', user.id)
-      
+        Cookies.set("user_id", user_id);
+        Cookies.set("clerk_user_id", user.id);
+        localStorage.setItem("user_id", user_id);
       })
       .catch((error) => {
-        console.error('Error fetching user ID:', error);
+        console.error("Error fetching user ID:", error);
       });
   }, [user, isSignedIn]);
 
@@ -52,10 +54,10 @@ export default function PrincipalPage() {
       const fechaActual = new Date();
       const diferencia = fechaActual - new Date(fechaSubida);
       const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-      
+
       if (dias > 30) {
         const meses = Math.floor(dias / 30);
-        
+
         if (meses > 12) {
           const años = Math.floor(meses / 12);
           return `${años} años`;
@@ -67,9 +69,13 @@ export default function PrincipalPage() {
       }
     };
 
-     // Fetch channel info for each video's user ID and update the channelInfoMap
+    // Fetch channel info for each video's user ID and update the channelInfoMap
     const updateChannelInfoMap = async () => {
-      const updatedChannelInfoMap = await fetchChannelInfoForVideos(channelInfoMap, videosInfos, 'videos');
+      const updatedChannelInfoMap = await fetchChannelInfoForVideos(
+        channelInfoMap,
+        videosInfos,
+        "videos"
+      );
       setChannelInfoMap(updatedChannelInfoMap);
     };
     updateChannelInfoMap();
@@ -80,28 +86,32 @@ export default function PrincipalPage() {
     });
   }, [videosInfos]);
 
-  
-    useEffect(() => {
-      // Function to fetch suscripciones for a given user ID
-      if (!isSignedIn) return;
-      else{
-        axios.get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/suscripciones/?suscriptor_clave=${clerk_user_id}`)
-          .then((response) => {
-            console.log(response.data)
-            setSubscriptions(response.data)
+  useEffect(() => {
+    // Function to fetch suscripciones for a given user ID
+    if (!isSignedIn) return;
+    else {
+      axios
+        .get(
+          `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/suscripciones/?suscriptor_clave=${clerk_user_id}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          setSubscriptions(response.data);
         })
-        .catch ((error) => {
+        .catch((error) => {
           console.error("Error fetching suscripciones:", error);
           return null;
         });
-      }
-    }, [clerk_user_id]);
-  
-
+    }
+  }, [clerk_user_id]);
 
   useEffect(() => {
     const updateSuscripcionesInfoMap = async () => {
-      const updatedSubscriptionsInfoMap = await fetchChannelInfoForVideos(subscriptionsInfoMap, subscriptions, 'suscripciones');
+      const updatedSubscriptionsInfoMap = await fetchChannelInfoForVideos(
+        subscriptionsInfoMap,
+        subscriptions,
+        "suscripciones"
+      );
       setSubscriptionsInfoMap(updatedSubscriptionsInfoMap);
     };
     updateSuscripcionesInfoMap();
@@ -138,7 +148,7 @@ const getChannelInfo = async (channelId) => {
   console.log(`Fetching channel info for channel ID:`, channelId);
   try {
     const response = await axios.get(
-      `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${channelId}`,
+      `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info?canal_id=${channelId}`
     );
     return response.data;
   } catch (error) {
@@ -147,29 +157,24 @@ const getChannelInfo = async (channelId) => {
   }
 };
 
-
 const fetchChannelInfoForVideos = async (dataMap, infos, purpose) => {
   const updatedChannelInfoMap = new Map(dataMap);
   let ID;
-  console.log(purpose, infos)
+  console.log(purpose, infos);
   await Promise.all(
     infos.map(async (info) => {
-      if (purpose === 'suscripciones') {
+      if (purpose === "suscripciones") {
         ID = info.canal_id;
-      }
-      else if (purpose === 'videos') {
+      } else if (purpose === "videos") {
         ID = info.user_id;
       }
-        console.log(`Fetching ${purpose} info for user ID:`, ID);
-        const channelInfo = await getChannelInfo(ID);
-        updatedChannelInfoMap.set(ID, {
-          username: channelInfo ? channelInfo.username : "Unknown",
-          foto_ruta: channelInfo.foto_ruta,
-        });
-  
+      console.log(`Fetching ${purpose} info for user ID:`, ID);
+      const channelInfo = await getChannelInfo(ID);
+      updatedChannelInfoMap.set(ID, {
+        username: channelInfo ? channelInfo.username : "Unknown",
+        foto_ruta: channelInfo.foto_ruta,
+      });
     })
   );
   return updatedChannelInfoMap;
-  
 };
-
