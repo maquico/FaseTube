@@ -36,7 +36,7 @@ const ClerkWithRoutes = () => {
         baseTheme: dark,
         variables: {
           colorPrimary: "#5a189a",
-          colorBackground: "#24004680",
+          colorBackground: "#110021",
           fontFamily: "Jockey One",
           colorAlphaShade: "#7B2CBF",
           borderRadius: "0.75rem",

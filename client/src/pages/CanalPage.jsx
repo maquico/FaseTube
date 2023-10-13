@@ -1,24 +1,42 @@
 import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { PencilSquare } from "react-bootstrap-icons";
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/clerk-react";
+import axios from "axios";
 
 export default function CanalPage() {
   const { canal } = useParams();
+
+  const [canalInfo, setCanalInfo] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/canal/info/?canal_id=${canal}`
+      )
+      .then((response) => {
+        setCanalInfo(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => console.error("Error fetching canal:", error));
+  }, []);
 
   return (
     <div className="flex">
       <Sidebar />
       <div className="w-5/6">
-        {" "}
         {/* Canal */}
         <div className="flex w-[90wv] columns-2 mx-6 my-8">
-          <div className="flex w-[163px] h-[163px] bg-purple-700 rounded-full mx-6" />
+          <div className="flex w-[163px] h-[163px] rounded-full mx-6">
+            <img src={canalInfo.foto_ruta} className="rounded-full" />
+          </div>
           <div className="font-serif text-white">
             <br />
-            <h1 className="text-3xl">TheBestChannel</h1>
+            <h1 className="text-3xl">{canalInfo.username}</h1>
             <p className="text-xl">ID: {canal}</p>
-            <p className="text-xl">Usuario: </p>
-            <p>Descripción: </p>
+            {/* <p className="text-xl">Usuario: </p>
+            <p>Descripción: </p> */}
           </div>
         </div>
         {/* Menu */}
