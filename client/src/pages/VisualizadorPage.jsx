@@ -209,7 +209,7 @@ export default function VisualizadorPage() {
             src={`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/videos/watch/?video_id=${video}`}
             className="w-[930px] h-[523px] object-cover focus:outline-none rounded-xl"
             controls
-            // autoPlay
+            autoPlay
           />
         </div>
         <hr className="my-1 invisible" />
