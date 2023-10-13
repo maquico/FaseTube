@@ -1,8 +1,9 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, json } from "react-router-dom";
 import { HandThumbsUp, HandThumbsDown } from "react-bootstrap-icons";
 import RelatedVideo from "../components/RelatedVideo";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Comments from '../components/Comments';
 
 function formatDate(date) {
   const nombreMes = [
@@ -140,8 +141,7 @@ export default function VisualizadorPage() {
   const [dislikes, setDislikes] = useState(0);
   const [likesStates, setLikesStates] = useState(0); 
   const [canalId, setCanalId] = useState();
-
-  
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     axios
@@ -158,6 +158,27 @@ export default function VisualizadorPage() {
       .catch((error) => console.error("Error fetching video: ", error));
   }, [video]);
 
+  useEffect(() => {
+    // Make an HTTP request to the backend to fetch the comments
+    const videoID = parseInt(video, 10)
+    if (isNaN(videoID)) {
+    // Handle invalid user_id or video_id here, e.g., return an error response.
+    return;
+  }
+
+    axios
+      .get(`https://fase-tube-server-c537f172c3b7.herokuapp.com/api/comments/?video_id=${videoID}`)
+      .then((response) => {
+        // Parse the response data into a JavaScript object
+        const commentsData = response.data;
+
+        // Update the state of the component
+        setComments(commentsData);
+      })
+      .catch((error) => {
+        console.error("Error fetching comments:", error);
+      });
+  }, [video]);
 
   useEffect(() => {
     // Fetch the like and dislike counts for the current video
@@ -227,9 +248,6 @@ export default function VisualizadorPage() {
               <h2 className="font-serif text-white whitespace-nowrap overflow-hidden">
                 {canalInfo.username}
               </h2>
-              <p className="font-serif text-white opacity-50 text-xs">
-                1,000 subs
-              </p>
             </div>
 
             {/* Botón de suscripción */}
@@ -292,18 +310,7 @@ export default function VisualizadorPage() {
 
           {/* Comentarios publicados */}
           <div className="my-4">
-            <Comentario
-              canal="Canal A"
-              comentario="Me gusta la carne, la leche y el pan.Me gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el panMe gusta la carne, la leche y el pan"
-            />
-            <Comentario
-              canal="Canal B"
-              comentario="El más inteligente de su casa (vive solo)"
-            />
-            <Comentario
-              canal="Canal C"
-              comentario="No dejes que nadie arruine tu día. Es TU DÍA; arruínalo tú mismo"
-            />
+            <Comments comments={comments} />
           </div>
           <hr className="my-10 invisible" />
         </div>
@@ -322,17 +329,11 @@ export default function VisualizadorPage() {
   );
 }
 
-const Comentario = ({ canal, comentario }) => {
-  return (
-    <div className="w-full flex columns-2 my-4 mx-2">
-      <div className="w-10 h-10 rounded-full bg-purple-700"></div>
-      <div className="w-[800px] font-serif text-white mx-2">
-        <p>{canal}</p>
-        <p className="opacity-60">{comentario}</p>
-      </div>
-    </div>
-  );
-};
+
+
+
+
+
 
 
 
