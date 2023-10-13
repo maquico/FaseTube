@@ -6,7 +6,23 @@ import axios from "axios";
 
 export default function BusquedaPage() {
   const { busqueda } = useParams();
-  const [resultados, setResultados] = useState([]);
+  const [resultados, setResultados] = useState([
+    {
+      video_id: 9,
+      titulo: "Relax - Tenis",
+      miniatura_ruta: "img1697161415295-tenis-thumbs.jpg",
+      video_ruta: "vid1697161415295-tenis.mp4",
+      likes: 0,
+      dislikes: 0,
+      vistas: 4,
+      duracion: 8,
+      fecha_reg: "2023-10-13T01:43:36.000Z",
+      fecha_publicacion: null,
+      descripcion: "Aquí chill bien makiavélico",
+      user_id: 23,
+      visibilidad_id: 1,
+    },
+  ]);
 
   useEffect(() => {
     axios
@@ -14,6 +30,7 @@ export default function BusquedaPage() {
         `https://fase-tube-server-c537f172c3b7.herokuapp.com/api/busqueda/?text=${busqueda}`
       )
       .then((response) => {
+        console.log(response.data);
         setResultados(response.data);
       })
       .catch((error) => {
@@ -28,17 +45,18 @@ export default function BusquedaPage() {
         <div className="font-serif text-white mx-2">
           <h1 className="text-2xl">Resultados de la busqueda: {busqueda}</h1>
           <div className="w-[70vw] my-4">
-            {resultados.map((video) => {
+            {resultados.map((info) => (
               <LargeCardVideo
-                video_id={video.video_id}
-                miniatura={video.miniatura_ruta}
-                titulo={video.titulo}
-                vistas={video.vistas}
-                tiempoSubido={video.tiempoSubido}
-                canal={video.canal}
-                descripcion={video.descripcion}
-              />;
-            })}
+                key={info.video_id}
+                video_id={info.video_id}
+                miniatura={info.miniatura_ruta}
+                titulo={info.titulo}
+                vistas={info.vistas}
+                tiempoSubido={info.tiempoSubido}
+                canal={info.canal}
+                descripcion={info.descripcion}
+              />
+            ))}
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ export default function Topbar() {
   const navigate = useNavigate();
   const [busqueda, setBusqueda] = useState("");
   const handleBuscador = () => {
-    if (busqueda.trim().length !== 0) {
+    if (busqueda.trim().length > 3) {
       navigate("/buscar/" + busqueda.replaceAll("/", " "));
       setBusqueda(busqueda.replaceAll("/", " "));
     }
