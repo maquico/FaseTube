@@ -53,12 +53,12 @@ export default function CanalPage() {
         </div> */}
         {/*  */}
         <div className="flex flex-wrap w-[90wv] columns-3 mx-6 text-white font-serif">
+          {/* <CanalCardVideo />
           <CanalCardVideo />
           <CanalCardVideo />
           <CanalCardVideo />
           <CanalCardVideo />
-          <CanalCardVideo />
-          <CanalCardVideo />
+          <CanalCardVideo /> */}
         </div>
       </div>
     </div>
